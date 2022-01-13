@@ -217,8 +217,8 @@
         $emptyPrice = isEmpty($pPrice, "update-product-price");
         $emptyDesc = isEmpty($pDesc, "update-product-desc");
 
-        $emptyImage = isset($_FILES["update-product-image"]);
-        if(!$emptyImage) {
+        $emptyImage = (isset($_FILES["update-product-image"]["size"])) && ($_FILES["update-product-image"]["size"] > 0);
+        if($emptyImage) {
             $img = $_FILES["update-product-image"]["name"];
             $imgTmp = $_FILES["update-product-image"]["tmp_name"];
             $imgExt = pathinfo($img, PATHINFO_EXTENSION);
@@ -265,7 +265,7 @@
                     $errorPrice = true;
                 }
 
-                if(!$emptyImage) {
+                if($emptyImage) {
                     if(!isImage($imgExt)) {
                         echo '
                             <script>
