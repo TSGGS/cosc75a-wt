@@ -10,7 +10,7 @@
                 <img src="../images/resources/logo.jpg" class="logo">
                 <h1 class="text-white">RESET PASSWORD</h1>
             </div>
-            <form action="./reset.php" method="POST" enctype="multipart/form-data" autocomplete="on">
+            <form action="./reset.php" method="POST" enctype="multipart/form-data" autocomplete="off">
                 <div class="row m-2 mt-4 mb-4">
                     <div class="col-5">
                         <label for="login-id" class="col-form-label text-white"><h4>Employee ID</h4></label>
@@ -57,7 +57,7 @@
             $password = password_hash($_POST['reset-pass2'], PASSWORD_DEFAULT);
 
             $sql = "SELECT c.credential_employee_id AS eid FROM credentials AS c, employees AS e WHERE c.credential_employee_id=e.employee_id AND c.credential_employee_id=?";
-            $result = prepareSQL($conn, $sql, "i", $_POST['login-id']);
+            $result = prepareSQL($conn, $sql, "i", $_POST['reset-id']);
 
             if(mysqli_num_rows($result) < 1) {
                 echo "
