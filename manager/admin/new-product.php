@@ -121,9 +121,9 @@
         $emptyType = isEmpty($pType, "new-product-type");
         $emptyDesc = isEmpty($pDesc, "new-product-desc");
 
-        $errorCode = false;
-        $errorImage = false;
-        $errorPrice = false;
+        $error1 = false;
+        $error2 = false;
+        $error3 = false;
 
 
         $sql = "SELECT product_id, product_code FROM products WHERE product_code=?";
@@ -135,7 +135,7 @@
                 </script>
             ';
 
-            $errorCode = true;
+            $error1 = true;
         } else {
             echo '
                 <script>
@@ -143,7 +143,7 @@
                 </script>
             ';
 
-            $errorCode = false;
+            $error1 = false;
         }
 
         if(!isImage($imgExt)) {
@@ -153,7 +153,7 @@
                 </script>
             ';
 
-            $errorImage = true;
+            $error2 = true;
         } else {
             echo '
                 <script>
@@ -161,7 +161,7 @@
                 </script>
             ';
 
-            $errorCode = false;
+            $error2 = false;
         }
 
         if($pPrice >= 0) {
@@ -171,7 +171,7 @@
                 </script>
             ';
 
-            $errorPrice = false;
+            $error3 = false;
         } else {
             echo '
                 <script>
@@ -179,10 +179,10 @@
                 </script>
             ';
 
-            $errorPrice = true;
+            $error3 = true;
         }
 
-        if(!$emptyCode && !$emptyName && !$emptyType && !$errorCode && !$errorImage && !$errorPrice && !$emptyDesc) {
+        if(!$emptyCode && !$emptyName && !$emptyType && !$error1 && !$error2 && !$error3 && !$emptyDesc) {
             $rename = date('YmdHis').'_'.uniqid().'.'.$imgExt;
         
             move_uploaded_file($imgTmp, "../../images/product_images/$rename");
