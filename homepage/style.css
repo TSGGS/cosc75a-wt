@@ -1,0 +1,70 @@
+@charset "utf-8";
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+.wrapper{
+    width: 1170px;
+    margin: auto;
+}
+.body{
+    background:url("images/background.jpg");
+    height: 100vh;
+    background-size: cover;
+    background-position: center center;
+    position: relative;
+}
+.nav-area{
+    float: right;
+    list-style: none;
+    margin-top: 20px;
+    padding-right: 10px;
+
+}
+.nav-area li{
+    display: inline-block;
+}
+.nav-area li a{
+    color: #000000;
+    text-decoration: none;
+    padding: 5px 20px;
+    font-size: 14px;
+}
+.nav-area li a:hoever{
+    background: #fff;
+    color: #333;
+}
+.logo img{
+    width: 100px;
+    float: left;
+    padding-left: 5%;
+    padding-top: 2%;
+}
+.welcome-text{
+    position: absolute;
+    margin: 20% 30%;
+    text-align: center;
+}
+.welcome-text h1{
+    text-align: center;
+    color: #000000;
+    text-transform: uppercase;
+    font-size: 60px;
+}
+.welcome-text a{
+    border: 1px solid #000000;
+    padding: 10px 25px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 14px;
+    margin-top: 20px;
+    color: #fff;
+}
+.welcome-text a:hoever{
+    background: #fff;
+    color: #333;
+}
+.welcome-text p{
+    color: #fff;
+}
