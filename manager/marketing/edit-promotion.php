@@ -148,8 +148,8 @@
         $emptyStart = isEmpty($prStart, "update-promotion-start");
         $emptyEnd = isEmpty($prEnd, "update-promotion-end");
 
-        $emptyImage = isset($_FILES["update-promotion-image"]);
-        if(!$emptyImage) {
+        $emptyImage = (isset($_FILES["update-promotion-image"]["size"])) && ($_FILES["update-promotion-image"]["size"] > 0);
+        if($emptyImage) {
             $img = $_FILES["update-promotion-image"]["name"];
             $imgTmp = $_FILES["update-promotion-image"]["tmp_name"];
             $imgExt = pathinfo($img, PATHINFO_EXTENSION);
@@ -177,7 +177,7 @@
             $errorCode = false;
         }
 
-        if(!$emptyImage) {
+        if($emptyImage) {
             if(!isImage($imgExt)) {
                 echo '
                     <script>
