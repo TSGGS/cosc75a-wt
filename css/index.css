@@ -68,6 +68,28 @@ body {
     transform: translate(-50%, -50%);
 }
 
+.types {
+    clear: both;
+    position: relative;
+    width: 100vw;
+    height: 88vh;
+}
+
+.type-image {
+    width: 100vw;
+    height: 88vh;
+}
+
+.type-name {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 72pt;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: white;
+    z-index: 100;
+}
+
 .footer {
     clear: both;
     background-color: black;
