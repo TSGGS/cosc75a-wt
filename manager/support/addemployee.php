@@ -149,7 +149,6 @@
             VALUES ('".$fname."', '".$lname."', '".$team."')";
 
             if ($conn->query($sql) === TRUE) {
-                echo "New record created successfully";
 
                 $sql1 = "SELECT MAX(employee_id) as max_id FROM employees";
                 $result = prepareSQL($conn, $sql1);

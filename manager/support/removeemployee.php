@@ -12,7 +12,7 @@
                     <th class="inline-center">First Name</th>
                     <th class="inline-center">Last Name</th>
                     <th class="inline-center">Team</th>
-                    <th class="inline-center">Actions</th>
+                    <th class="inline-center">Action</th>
                 </tr>
             </thead>
             <tbody>
