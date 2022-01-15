@@ -22,7 +22,7 @@
             </thead>
             <tbody>
                 <?php
-                    $sql = "SELECT * FROM employees INNER JOIN teams WHERE employee_team_id = team_id";
+                    $sql = "SELECT * FROM employees INNER JOIN teams WHERE employee_team_id = team_id AND employee_account_end IS NULL";
                     $result = prepareSQL($conn, $sql);
                     while($resultRow = mysqli_fetch_array($result)) {
                         echo '
