@@ -63,7 +63,7 @@
             </div>
             <div class="row">
                 <div class="col-4 col-title-large">
-                    <label class="col-form-label" for="new-employee-mobile"><h4>Employee Email</h4></label>
+                    <label class="col-form-label" for="new-employee-email"><h4>Employee Email</h4></label>
                 </div>
                 <div class="col">
                     <div class="row">
@@ -97,7 +97,7 @@
                 </div>
                 <div class="row">
                 <div class="col-4 col-title-large">
-                    <label class="col-form-label" for="new-employee-mobile"><h4>Temporary Password</h4></label>
+                    <label class="col-form-label" for="new-employee-password"><h4>Temporary Password</h4></label>
                 </div>
                 <div class="col">
                     <div class="row">
@@ -117,24 +117,25 @@
         </form>
     </div>
 <?php
-       if(isset($_POST["new-employee"])) {
+    if(isset($_POST["new-employee"])) {
         $fname = $_POST["new-employee-fname"];
         $lname = $_POST["new-employee-lname"];
         $mobile = $_POST["new-employee-mobile"];
         $email = $_POST["new-employee-email"];
         $password = $_POST["new-employee-password"];
         $team = $_POST["new-employee-team"];
-        if(!preg_match("/^\+?\d{12}$/", $fname)) {
+
+        if(!preg_match("/^\+?\d{12}$/", $mobile)) {
             echo '
                 <script>
-                    toggleError(new-employee-name-error, show);
+                    toggleError(new-employee-mobile-error, show);
                 </script>
             ';
             $error1 = true;
         }else {
             echo '
                 <script>
-                    toggleError(new-employee-name-error, hide);
+                    toggleError(new-employee-mobile-error, hide);
                 </script>
             ';
             $error1 = false;
@@ -142,51 +143,42 @@
 
         $error2 = validatePassword($password);
         
-        if (!$error1 && !$error2 && filter_var($email, FILTER_VALIDATE_EMAIL)) 
+        if ($error1 == false && $error2 == true && filter_var($email, FILTER_VALIDATE_EMAIL) != false) 
         {
-
-        
-
-        $sql = "INSERT INTO employees (employee_firstname, employee_lastname, employee_team_id)
-        VALUES ('".$fname."', '".$lname."', '".$team."')";
-
-     
-
-
-        if ($conn->query($sql) === TRUE) {
-        echo "New record created successfully";
-
-        $sql1 = "SELECT MAX(employee_id) as max_id FROM employees";
-        $result = prepareSQL($conn, $sql1);
-        while($resultRow = mysqli_fetch_array($result)) {
-            $maxid = $resultRow["max_id"];
-            
-            $sql = "INSERT INTO credentials (credential_employee_id, credential_password)
-            VALUES ('".$maxid."', '". password_hash($password,PASSWORD_DEFAULT)."')";
-    
-
+            $sql = "INSERT INTO employees (employee_firstname, employee_lastname, employee_team_id)
+            VALUES ('".$fname."', '".$lname."', '".$team."')";
 
             if ($conn->query($sql) === TRUE) {
-            echo "New record created successfully";
-            echo '
-            <script>
-                window.location.replace("dashboard.php");
-            </script>
-        ';
+                echo "New record created successfully";
+
+                $sql1 = "SELECT MAX(employee_id) as max_id FROM employees";
+                $result = prepareSQL($conn, $sql1);
+                while($resultRow = mysqli_fetch_array($result)) {
+                    $maxid = $resultRow["max_id"];
+                
+                    $sql = "INSERT INTO credentials (credential_employee_id, credential_password)
+                    VALUES ('".$maxid."', '". password_hash($password,PASSWORD_DEFAULT)."')";
+        
+
+
+                    if ($conn->query($sql) === TRUE) {
+                        echo '
+                            <script>
+                                window.location.replace("dashboard.php");
+                            </script>
+                        ';
+                    } else {
+                        echo "Error: " . $sql . "<br>" . $conn->error;
+                    }
+                }
+
             } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+                echo "Error: " . $sql . "<br>" . $conn->error;
             }
-        }
 
         } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+            echo "<script> alert('ERROR: USER WAS NOT ADDED'); </script>"; 
         }
-
-    } else {
-        echo "<script> alert('ERROR: USER WAS NOT ADDED'); </script>"; 
-    }
-
-    
     }
 
 
