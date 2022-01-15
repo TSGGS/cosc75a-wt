@@ -194,8 +194,13 @@
             $sql = "INSERT INTO products VALUES (NULL, ?, ?, ?, ?, ?, NULL, NULL)";
             prepareSQL($conn, $sql, "ssiss", $pCode, $pName, $pType, $pDesc, $rename);
 
-            $sql = "INSERT INTO prices VALUES (NULL, ?, ?, NULL, NULL)";
-            prepareSQL($conn, $sql, "ii", $productID, $pPrice);
+
+            $sql = 'SELECT * FROM products WHERE product_code="'.$pCode.'"';
+            $result = prepareSQL($conn, $sql);
+            $pID = mysqli_fetch_array($result);
+
+            $sql = "INSERT INTO prices VALUES(NULL, ?, ?, NULL, NULL)";
+            prepareSQL($conn, $sql, "ii", $pID["product_id"], $pPrice);
 
             echo '
                 <script>
