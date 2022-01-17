@@ -92,15 +92,16 @@ body {
 }
 
 .footer {
-    clear: both;
-    background-color: black;
-    position: absolute;
     width: 100vw;
     height: 400px;
+    background-color: black;
+    position: absolute;
 }
 
 .map {
-    margin: 5vh 5vw;
+    margin-top: 5vh;
+    margin-left: 5vw;
+    margin-right: 5vw;
     float: left;
 }
 
@@ -117,6 +118,7 @@ body {
 }
 
 /* Product Page */
+
 .content {
     width: 95vw;
     position: absolute; 
@@ -128,6 +130,11 @@ body {
 .content #page-title {
     font-weight: 700;
     text-align: center;
+}
+
+.store {
+    clear: both;
+    position: relative;
 }
 
 .product {
