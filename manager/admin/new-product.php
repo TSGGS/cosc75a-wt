@@ -202,6 +202,9 @@
             $sql = "INSERT INTO prices VALUES(NULL, ?, ?, NULL, NULL)";
             prepareSQL($conn, $sql, "ii", $pID["product_id"], $pPrice);
 
+            $sql = "INSERT INTO inventory VALUES(NULL, ?, 0, NULL)";
+            prepareSQL($conn, $sql, "i", $pID["product_id"]);
+
             echo '
                 <script>
                     window.location.replace("dashboard.php");
