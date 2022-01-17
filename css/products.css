@@ -141,8 +141,8 @@ img{
     padding-right: 0.6rem;
     display: inline-block;
 }
-.product-price: {
-    text-decoration:;
+.product-price {
+    text-decoration: none;
     color: var(--carribean-green);
 }
 .product-img img{

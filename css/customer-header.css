@@ -1,0 +1,192 @@
+@charset "utf-8";
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+}
+body {
+    overflow-x: hidden;
+}
+.wrapper{
+    position: absolute;
+    width: 100vw;
+    height: 12vh;
+    background-color: #000000;
+    z-index: 1000;
+}
+
+.logo {
+    height: 12vh;
+    margin-left: 3vw;
+}
+
+.nav-area{
+    float: right;
+    list-style: none;
+    margin-top: 20px;
+    margin-right: 10px;
+
+}
+.nav-area li{    
+    display: inline-block;
+}
+.nav-area li a{
+    color: #ffffff;
+    text-decoration: none;
+    padding: 4vh 20px;
+    font-size: 24px;
+}
+.nav-area li a:hover{
+    background: white;
+    color: #333;
+}
+.welcome-div{
+    width: 100vw;
+    height: 88vh;
+    text-align: center;
+    vertical-align: center;
+}
+.welcome-text {
+    position: absolute;
+    color: #000000;
+    font-size: 80px;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.index {
+    transform: translate(-50%, -50%) !important;
+}
+
+.welcome-subtext {
+    position: absolute;
+    color: #000000;
+    font-size: 40px;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.types {
+    clear: both;
+    position: relative;
+    width: 100vw;
+    height: 88vh;
+}
+
+.type-image {
+    width: 100vw;
+    height: 88vh;
+}
+
+.type-name {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 72pt;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: white;
+    z-index: 100;
+}
+
+.footer {
+    clear: both;
+    background-color: black;
+    position: absolute;
+    width: 100vw;
+    height: 400px;
+}
+
+.map {
+    margin: 5vh 5vw;
+    float: left;
+}
+
+.contact {
+    margin-top: 5vh;
+    color: #ffffff !important;
+    float: left;
+    line-height: 1;
+}
+
+.details {
+    margin-top: 15px;
+    font-size: larger;
+}
+
+/* Product Page */
+.content {
+    width: 95vw;
+    position: absolute; 
+    top: 12vh; 
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.content #page-title {
+    font-weight: 700;
+    text-align: center;
+}
+
+.product {
+    width: 45vh;
+    height: 60vh;
+    margin: 0 14px;
+    margin-bottom: 20px;
+    float: left;
+    position: relative;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+
+}
+
+.product-image {
+    position: absolute;
+    width: 100%;
+    height: 60%;
+}
+
+.product-buttons {
+    width: 100%;
+    height: 15%;
+    position: absolute;
+    top: 45%;
+}
+
+.product-buttons button {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: black;
+    color: #ffffff;
+    opacity: 0;
+    transition: opacity 10sec ease;
+}
+
+.product-buttons button:hover {
+    opacity: 1;
+}
+
+.product-info {
+    position: absolute;
+    margin-top: 5px;
+    margin-left: 5px;
+    top: 60%;
+}
+
+.product-category {
+    display: block;
+    letter-spacing: 5px;
+    font-weight: 400;
+}
+.product-title {
+    display: block;
+    font-weight: bold;
+}
+
+.product-description {
+    display: block;
+    margin-top: 10px;
+    font-weight: 400;
+}
