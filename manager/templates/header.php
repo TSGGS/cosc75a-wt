@@ -26,8 +26,8 @@
                             echo '
                             <li class="nav-item dropdown"><a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Product</a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li"><a class="dropdown-item" aria-current="page" href="./new-product.php">New Product</a></li>
-                                <li"><a class="dropdown-item" aria-current="page" href="./edit-product.php">Update Product</a></li>
+                                <li><a class="dropdown-item" aria-current="page" href="./new-product.php">New Product</a></li>
+                                <li><a class="dropdown-item" aria-current="page" href="./edit-product.php">Update Product</a></li>
                                 </ul>
                             </li>
 
@@ -76,7 +76,7 @@
                 <ul class="navbar-nav mb-2 mb-lg-0 mr-3 d-flex">
                     <li class="nav-item dropdown"><a class="nav-link dropdown-toggle text-white" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><strong><?php echo $_SESSION["fname"].' '.$_SESSION["lname"]; ?></strong></a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="../user/profile.php">Profile</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="../logout.php">Logout</a></li>
                         </ul>
