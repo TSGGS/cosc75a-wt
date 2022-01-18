@@ -36,7 +36,7 @@
                         } elseif($_SESSION["tid"] == 2) {
                             echo '
                             <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">View Orders</a></li>
-                            <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Update Inventory</a></li>
+                            <li class="nav-item"><a class="nav-link active" aria-current="page" href="./inventory.php">Update Inventory</a></li>
                             ';
                         } elseif($_SESSION["tid"] == 3) {
                            echo '
