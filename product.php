@@ -4,9 +4,10 @@
     echo '
         <title>Walang Tatak - Products</title>
         <script src="https://kit.fontawesome.com/dbed6b6114.js" crossorigin="anonymous"></script>
-		    <script src="store.js"></script>
+		    <script src="js/store.js"></script>
     ';
 ?>
+    <div class="container">
     <div class="store">
         <div class="content mt-2">
             <h1 class="mt-3" id="page-title">Products</h1>
@@ -18,7 +19,7 @@
                     <div class="product">
                         <img class="product-image" src="images/product_images/'.$resultRow["product_image"].'" alt="product-image">
                         <div class="product-buttons">
-                            <button>Add to Cart</button>
+                            <button onclick="addtoCart(\''.$resultRow["product_code"].'\')">Add to Cart</button>
                         </div>
                         <div class="product-info">
                             <span class="product-category">'.$resultRow["type_name"].'</span>
@@ -32,3 +33,7 @@
             ?>
         </div>
     </div>
+    </div>
+    <div class="container" style="background-color: yellow;">
+            <h1><a href="#">CART</a></h1>
+        </div>

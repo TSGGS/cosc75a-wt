@@ -15,6 +15,18 @@
             <ul class="nav-area">
                 <li><a href="index.php">Home</a></li>
                 <li><a href="product.php">Order</a></li>
-                <!-- <li><a href="contact.php">Contact</a></li> -->
+                <!-- <li><a href="cart.php">Cart</a></li> -->
             </ul>
         </div>
+
+        <!-- <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <div class="container-fluid">
+                <a href="#"><img src="images/resources/logo.jpg" class="logo"></a>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                </div>
+                <ul class="navbar-nav mb-2 mb-lg-0 mr-3 d-flex">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.php"><h3>Home</h3></a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="product.php"><h3>Order</h3></a></li>
+                </ul>
+            </div>
+        </nav>     -->
