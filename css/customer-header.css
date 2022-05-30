@@ -5,9 +5,21 @@
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
 }
+
 body {
     overflow-x: hidden;
+    overflow-y: scroll;
 }
+
+/* POSITIONS */
+
+.text-center {
+    text-align: center;
+    vertical-align: center;
+}
+
+/* IDENTIFIER */
+
 .wrapper{
     width: 100vw;
     height: 12vh;
@@ -94,7 +106,7 @@ body {
     width: 100vw;
     height: 400px;
     background-color: black;
-    position: absolute;
+    clear: both;
 }
 
 .map {
@@ -191,6 +203,18 @@ body {
     font-weight: 400;
 }
 
-.cart {
-    display: block;
+/* CART PAGE */
+
+#cart-count {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: #ff0000;
+    position: absolute;
+    top: 0.5vw;
+    right: 0.1vw;
+    text-align: center;
+    color: #ffffff;
+    vertical-align: middle;
 }
+

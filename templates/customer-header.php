@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<?php
+    session_start();
+    if(!isset($_SESSION["cartCount"])) {
+        $count = 0;
+    } else {
+        $count = $_SESSION["cartCount"];
+    }
+?>
 <html>
     <head>
         <meta charset="utf-8">
@@ -15,7 +23,7 @@
             <ul class="nav-area">
                 <li><a href="index.php">Home</a></li>
                 <li><a href="product.php">Order</a></li>
-                <li><a href="product.php#cart">Cart</a></li>
+                <li><a href="cart.php">Cart</a><span id="cart-count"><?php echo $count; ?></span></li>
             </ul>
         </div>
 

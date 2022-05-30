@@ -30,9 +30,6 @@
             }
         ?>
     </div>
-    <div class="cart-section" style="background-color: yellow; clear: both;">
-            <h1 class="page-title"><a name="cart">CART</a></h1>
-    </div>
 <?php 
     include("templates/footer.php")
 ?>
