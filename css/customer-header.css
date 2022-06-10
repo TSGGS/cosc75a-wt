@@ -13,6 +13,12 @@ body {
 
 /* POSITIONS */
 
+.center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .text-center {
     text-align: center;
     vertical-align: center;
@@ -218,3 +224,20 @@ body {
     vertical-align: middle;
 }
 
+.parent {
+    position: relative;
+}
+
+.trash-can {
+    width: 20px;
+    height: 20px;
+}
+
+.cart-picture {
+    width: 40px;
+    height: 40px;
+}
+
+.cart-name {
+    white-space: nowrap;
+}
