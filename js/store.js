@@ -23,11 +23,17 @@ function addtoCart(prod) {
     xhr.send(jsonString);
 }
 
-function updateQty(code, price) {
+function updateQty(code, price, cartList) {
     let qty = document.getElementById(code+"-qty").value;
     let display = document.getElementById(code+"-total");
 
     let total = qty*price;
 
     display.innerHTML = "₱ "+total;
+
+    console.log(cartList);
+}
+
+function updateTotal() {
+
 }

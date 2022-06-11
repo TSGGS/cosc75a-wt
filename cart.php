@@ -45,7 +45,7 @@
                                 <span class="cart-name">'.$item["product_name"].'</span>
                             </div>
                             <div class="col-1">
-                                <input type="number" class="form-control" id="'.$item["product_code"].'-qty" name="" onblur="updateQty(\''.$item["product_code"].'\','.$item["price_amount"].')" min="1" value="1">
+                                <input type="number" class="form-control" id="'.$item["product_code"].'-qty" name="" onclick="updateQty(\''.$item["product_code"].'\','.$item["price_amount"].','.htmlspecialchars(json_encode($_SESSION["cartList"])).')" onblur="updateQty(\''.$item["product_code"].'\','.$item["price_amount"].','.htmlspecialchars(json_encode($_SESSION["cartList"])).')" min="1" value="1">
                             </div>
                             <div class="col-1 text-center">
                                 <span class="cart-name">₱ '.$item["price_amount"].'
@@ -70,6 +70,23 @@
                 ';
             }
         ?>
+        <div class="row text-center">
+            <div class="col-1">
+
+            </div>
+            <div class="col">
+                TOTAL PRICE
+            </div>
+            <div class="col-1">
+            </div>
+            <div class="col-1">
+            </div>
+            <div class="col-1">
+                Price
+            </div>
+            <div class="col-1">
+            </div>
+        </div>
         <!-- <div class="row mt-3">
             <div class="col" style="background-color: #ff0000;">
                 Name
