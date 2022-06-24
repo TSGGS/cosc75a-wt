@@ -1,5 +1,4 @@
 function addtoCart(prod) {
-    // alert(prod);
     let counter = document.getElementById("cart-count");
     let product = {
         "type": "cart",
@@ -23,17 +22,69 @@ function addtoCart(prod) {
     xhr.send(jsonString);
 }
 
-function updateQty(code, price, cartList) {
-    let qty = document.getElementById(code+"-qty").value;
+let list = [];
+function updateQty(code, price) {
+    let qty = document.getElementById(code+"-qty");
     let display = document.getElementById(code+"-total");
 
-    let total = qty*price;
+    if(qty.value === "") {
+        qty.innerText = 1;
+        qty.value = 1;
+    }
+
+    list[code]["count"] = qty.value;
+
+    let total = qty.value * price;
 
     display.innerHTML = "₱ "+total;
+    updateTotal();
+}
 
-    console.log(cartList);
+function initTotal(cartList) {
+    cartList.forEach(item => {
+        callPrice(item);
+        list[item] = {
+            "price": 0,
+            "count": 1
+        };
+    });
+}
+
+function callPrice(item) {
+    let product = {
+        "type": "price",
+        "product": item
+    };
+
+    let xhr = new XMLHttpRequest();
+    let jsonString = JSON.stringify(product);
+    let url = "includes/receive.php";
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.responseType = "json";
+    xhr.onload = function (){
+        let response = xhr.response;
+        for (i in list) {
+            if(i == response["product"]) {
+                list[i]["price"] = response["price"];
+            }
+        }
+        updateTotal();
+    };
+
+    xhr.send(jsonString);
 }
 
 function updateTotal() {
+    let displayTotal = document.getElementById("grandTotalDisplay");
+    let grandTotal = 0;
+    for (i in list) {
+        let itemTotal = 0;
+        itemTotal = list[i]["count"] * list[i]["price"];
+        grandTotal += itemTotal;
+    }
 
+    displayTotal.innerHTML = "₱ "+grandTotal;
 }

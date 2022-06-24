@@ -4,7 +4,7 @@
     echo '
         <title>Walang Tatak - Cart</title>
         <script src="https://kit.fontawesome.com/dbed6b6114.js" crossorigin="anonymous"></script>
-		    <script src="js/store.js"></script>
+		<script src="js/store.js"></script>
     ';
 ?>
     <div class="content mt-2">
@@ -31,6 +31,12 @@
         </div>
         <?php
             if(isset($_SESSION["cartList"])) {
+                echo '
+                    <script>
+                        initTotal('.json_encode($_SESSION["cartList"]).');
+                        updateTotal;
+                    </script>
+                ';
                 foreach($_SESSION["cartList"] as $prod) {
                     $sql = "SELECT * FROM products LEFT JOIN types AS t ON product_type=t.type_id LEFT JOIN prices AS p ON p.price_product_id=product_id INNER JOIN inventory AS i ON i.inventory_product_id=product_id WHERE p.price_end_timestamp IS NULL AND product_end_timestamp IS NULL AND i.inventory_product_count > 0 AND product_code=?";
                     $result = prepareSQL($conn, $sql, "s", $prod);
@@ -45,7 +51,7 @@
                                 <span class="cart-name">'.$item["product_name"].'</span>
                             </div>
                             <div class="col-1">
-                                <input type="number" class="form-control" id="'.$item["product_code"].'-qty" name="" onclick="updateQty(\''.$item["product_code"].'\','.$item["price_amount"].','.htmlspecialchars(json_encode($_SESSION["cartList"])).')" onblur="updateQty(\''.$item["product_code"].'\','.$item["price_amount"].','.htmlspecialchars(json_encode($_SESSION["cartList"])).')" min="1" value="1">
+                                <input type="number" class="form-control" id="'.$item["product_code"].'-qty" name="" onclick="updateQty(\''.$item["product_code"].'\','.$item["price_amount"].')" onblur="updateQty(\''.$item["product_code"].'\','.$item["price_amount"].')" min="1" max="'.$item["inventory_product_count"].'" value="1">
                             </div>
                             <div class="col-1 text-center">
                                 <span class="cart-name">₱ '.$item["price_amount"].'
@@ -81,8 +87,8 @@
             </div>
             <div class="col-1">
             </div>
-            <div class="col-1">
-                Price
+            <div class="col-1" id="grandTotalDisplay">
+                Calculating...
             </div>
             <div class="col-1">
             </div>
