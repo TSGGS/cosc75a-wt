@@ -7,7 +7,7 @@
 		<script src="js/store.js"></script>
     ';
 ?>
-    <div class="content mt-2">
+    <div class="content mt-2" id="cart-item-area">
         <h1 class="mt-3 page-title">Cart</h1>
         <div class="row text-center">
             <div class="col-1">
@@ -34,7 +34,6 @@
                 echo '
                     <script>
                         initTotal('.json_encode($_SESSION["cartList"]).');
-                        updateTotal;
                     </script>
                 ';
                 foreach($_SESSION["cartList"] as $prod) {
@@ -60,7 +59,7 @@
                                 <span class="cart-name" id="'.$item["product_code"].'-total">₱ '.$item["price_amount"].'</span>
                             </div>
                             <div class="col-1 text-center">
-                                <button type="button" class="btn btn-light"><img  class= "trash-can" src=".\images\resources\trash.png"></button>
+                                <button type="button" class="btn btn-light" onclick="deleteItem(\''.$item["product_code"].'\')"><img  class= "trash-can" src=".\images\resources\trash.png"></button>
                             </div>
                         </div>
                     ';
@@ -68,7 +67,7 @@
             }
             else {
                 echo '
-                    <div class="row mt-3">
+                    <div class="row mt-3" id="cart-no-item">
                         <div class="col text-center">
                             There is no product added to cart 
                         </div>
@@ -76,9 +75,8 @@
                 ';
             }
         ?>
-        <div class="row text-center">
+        <div class="row text-center" id="grandTotalRow">
             <div class="col-1">
-
             </div>
             <div class="col">
                 TOTAL PRICE
@@ -93,21 +91,7 @@
             <div class="col-1">
             </div>
         </div>
-        <!-- <div class="row mt-3">
-            <div class="col" style="background-color: #ff0000;">
-                Name
-            </div>
-            <div class="col" style="background-color: #00ff00;">
-                <input type="number" class="form-control" name="" min="1" value="1">
-            </div>
-            <div class="col  text-center" style="background-color: #0000ff;">
-                Amount
-            </div>
-            <div class="col  text-center" style="background-color: #ffff00;">
-                Total Price
-            </div>
-            <div class="col-1 text-center">
-                <button type="button" class="btn btn-light"><img  class= "trash-can" src=".\images\resources\trash.png"></button>
-            </div>
-        </div> -->
     </div>
+    <script>
+        removeTotal();
+    </script>

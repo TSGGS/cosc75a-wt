@@ -88,3 +88,87 @@ function updateTotal() {
 
     displayTotal.innerHTML = "₱ "+grandTotal;
 }
+
+function deleteItem(code) {
+    let itemCount = document.getElementById("cart-count");
+    let element = document.getElementById(code+"-row");
+
+    delete list[code];
+    updateTotal();
+    removeTotal();
+
+    let product = {
+        "type": "delete",
+        "product": code
+    };
+
+    let xhr = new XMLHttpRequest();
+    let jsonString = JSON.stringify(product);
+    let url = "includes/receive.php";
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.send(jsonString);
+
+    itemCount.innerText = itemCount.innerText - 1;
+    element.parentNode.removeChild(element);
+}
+
+function removeTotal() {
+    if(Object.keys(list).length  == 0) {
+        let area = document.getElementById("cart-item-area");
+        let row = document.getElementById("grandTotalRow");
+
+        row.parentNode.removeChild(row);
+
+        let noItem = document.createElement("div");
+        let noItemContent = document.createElement("div");
+
+        noItem.classList.add("row", "mt-3");
+        noItemContent.classList.add("col", "text-center");
+        noItemContent.innerHTML = "There is no product added to cart";
+
+        noItem.appendChild(noItemContent);
+        area.appendChild(noItem);
+    } 
+    // else {
+    //     if(!document.getElementById("grandTotalRow")) {
+    //         let area = document.getElementById("cart-item-area");
+    //         let noItem = document.getElementById("cart-no=item");
+
+    //         noItem.parentNode.removeChild(noItem);
+
+    //         let row = document.createElement("div");
+
+    //         row.id = "grandTotalRow";
+    //         row.classList.add("row", "text-center");
+
+    //         for(let i = 0; i < 6; i++) {
+    //             let col = document.createElement("div");
+    //             switch(i) {
+    //                 case 1:
+    //                     col.innerHTML = "TOTAL PRICE";
+    //                     col.classList.add("col")
+    //                     row.appendChild(col);
+    //                     break;
+                    
+    //                 case 4:
+
+    //                     col.id = "grandTotalDisplay";
+    //                     col.innerHTML = "Calculating";
+    //                     col.classList.add("col-1")
+    //                     row.appendChild(col);
+    //                     break;
+
+    //                 default:
+    //                     col.classList.add("col-1")
+    //                     row.appendChild(col);
+    //                     break;
+    //             }
+    //         }
+
+    //         area.appendChild(row);
+    //     }
+    // }
+}

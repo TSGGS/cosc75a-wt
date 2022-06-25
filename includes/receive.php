@@ -13,6 +13,10 @@
         case "price":
             getPrice($prodInfo["product"]);
             break;
+
+        case "delete":
+            deleteItem($prodInfo["product"]);
+            break;
         
         default:
             break;
@@ -46,6 +50,25 @@
         $response = array(
             "product" => $prod,
             "price" => $item["price_amount"]
+        );
+
+        header("Content-type: application/json");
+        echo json_encode($response);
+    }
+
+    function deleteItem(string $prod) {
+        if(!isset($_SESSION["cartList"])) {
+            $_SESSION["cartList"] = array();
+        } else {
+            if (in_array($prod, $_SESSION["cartList"])) {
+                $index = array_search($prod, $_SESSION["cartList"]);
+                unset($_SESSION["cartList"][$index]);
+                $_SESSION["cartCount"] = count($_SESSION["cartList"]);
+            }
+        }
+
+        $response = array(
+            "status" => "OK"
         );
 
         header("Content-type: application/json");
