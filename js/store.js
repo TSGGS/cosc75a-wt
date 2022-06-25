@@ -132,43 +132,4 @@ function removeTotal() {
         noItem.appendChild(noItemContent);
         area.appendChild(noItem);
     } 
-    // else {
-    //     if(!document.getElementById("grandTotalRow")) {
-    //         let area = document.getElementById("cart-item-area");
-    //         let noItem = document.getElementById("cart-no=item");
-
-    //         noItem.parentNode.removeChild(noItem);
-
-    //         let row = document.createElement("div");
-
-    //         row.id = "grandTotalRow";
-    //         row.classList.add("row", "text-center");
-
-    //         for(let i = 0; i < 6; i++) {
-    //             let col = document.createElement("div");
-    //             switch(i) {
-    //                 case 1:
-    //                     col.innerHTML = "TOTAL PRICE";
-    //                     col.classList.add("col")
-    //                     row.appendChild(col);
-    //                     break;
-                    
-    //                 case 4:
-
-    //                     col.id = "grandTotalDisplay";
-    //                     col.innerHTML = "Calculating";
-    //                     col.classList.add("col-1")
-    //                     row.appendChild(col);
-    //                     break;
-
-    //                 default:
-    //                     col.classList.add("col-1")
-    //                     row.appendChild(col);
-    //                     break;
-    //             }
-    //         }
-
-    //         area.appendChild(row);
-    //     }
-    // }
 }
