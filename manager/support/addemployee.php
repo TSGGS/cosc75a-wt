@@ -95,6 +95,7 @@
                         Invalid Team
                     </div>
                 </div>
+            </div>
                 <div class="row">
                 <div class="col-4 col-title-large">
                     <label class="col-form-label" for="new-employee-password"><h4>Temporary Password</h4></label>
@@ -122,62 +123,106 @@
         $lname = $_POST["new-employee-lname"];
         $mobile = $_POST["new-employee-mobile"];
         $email = $_POST["new-employee-email"];
-        $password = $_POST["new-employee-password"];
         $team = $_POST["new-employee-team"];
+        $password = $_POST["new-employee-password"];
 
-        if(!preg_match("/^\+?\d{12}$/", $mobile)) {
+        if(!validateName($fname) || !validateName($lname)) {
+            echo '
+                <script>
+                    toggleError(new-employee-name-error, show);
+                </script>
+            ';
+            $error1 = true;
+        } else {
+            $error1 = false;
+        }
+
+        if(!validateMobile($mobile)) {
             echo '
                 <script>
                     toggleError(new-employee-mobile-error, show);
                 </script>
             ';
-            $error1 = true;
-        }else {
+            $error2 = true;
+        } else {
+            $error2 = false;
+        }
+
+        if(!validateMobile($email)) {
             echo '
                 <script>
-                    toggleError(new-employee-mobile-error, hide);
+                    toggleError(new-employee-email-error, show);
                 </script>
             ';
-            $error1 = false;
-        }
-
-        $error2 = validatePassword($password);
-        
-        if ($error1 == false && $error2 == true && filter_var($email, FILTER_VALIDATE_EMAIL) != false) 
-        {
-            $sql = "INSERT INTO employees (employee_firstname, employee_lastname, employee_team_id)
-            VALUES ('".$fname."', '".$lname."', '".$team."')";
-
-            if ($conn->query($sql) === TRUE) {
-
-                $sql1 = "SELECT MAX(employee_id) as max_id FROM employees";
-                $result = prepareSQL($conn, $sql1);
-                while($resultRow = mysqli_fetch_array($result)) {
-                    $maxid = $resultRow["max_id"];
-                
-                    $sql = "INSERT INTO credentials (credential_employee_id, credential_password)
-                    VALUES ('".$maxid."', '". password_hash($password,PASSWORD_DEFAULT)."')";
-        
-
-
-                    if ($conn->query($sql) === TRUE) {
-                        echo '
-                            <script>
-                                window.location.replace("dashboard.php");
-                            </script>
-                        ';
-                    } else {
-                        echo "Error: " . $sql . "<br>" . $conn->error;
-                    }
-                }
-
-            } else {
-                echo "Error: " . $sql . "<br>" . $conn->error;
-            }
-
+            $error3 = true;
         } else {
-            echo "<script> alert('ERROR: USER WAS NOT ADDED'); </script>"; 
+            $error3 = false;
         }
+        
+        if(!validatePassword($password)) {
+            echo '
+                <script>
+                    toggleError(new-employee-password-error, show);
+                </script>
+            ';
+            $error4 = true;
+        } else {
+            $error4 = false;
+        }
+
+        // if(!preg_match("/^\+?\d{12}$/", $mobile)) {
+        //     echo '
+        //         <script>
+        //             toggleError(new-employee-mobile-error, show);
+        //         </script>
+        //     ';
+        //     $error1 = true;
+        // }else {
+        //     echo '
+        //         <script>
+        //             toggleError(new-employee-mobile-error, hide);
+        //         </script>
+        //     ';
+        //     $error1 = false;
+        // }
+
+        // $error2 = validatePassword($password);
+        
+        // if ($error1 == false && $error2 == true && filter_var($email, FILTER_VALIDATE_EMAIL) != false) 
+        // {
+        //     $sql = "INSERT INTO employees (employee_firstname, employee_lastname, employee_team_id)
+        //     VALUES ('".$fname."', '".$lname."', '".$team."')";
+
+        //     if ($conn->query($sql) === TRUE) {
+
+        //         $sql1 = "SELECT MAX(employee_id) as max_id FROM employees";
+        //         $result = prepareSQL($conn, $sql1);
+        //         while($resultRow = mysqli_fetch_array($result)) {
+        //             $maxid = $resultRow["max_id"];
+                
+        //             $sql = "INSERT INTO credentials (credential_employee_id, credential_password)
+        //             VALUES ('".$maxid."', '". password_hash($password,PASSWORD_DEFAULT)."')";
+        
+
+
+        //             if ($conn->query($sql) === TRUE) {
+        //                 echo '
+        //                     <script>
+        //                         window.location.replace("dashboard.php");
+        //                     </script>
+        //                 ';
+        //             } else {
+        //                 echo "Error: " . $sql . "<br>" . $conn->error;
+        //             }
+        //         }
+
+        //     } else {
+        //         echo "Error: " . $sql . "<br>" . $conn->error;
+        //     }
+
+        // } else {
+        //     echo "<script> alert('ERROR: USER WAS NOT ADDED'); </script>"; 
+        // }
     }
 
 

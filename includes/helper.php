@@ -105,3 +105,28 @@
             }
         }
     }
+
+    function validateName($name) {
+        if(!preg_match("\b[A-Z][a-z]*( [A-Z][a-z]*)*\b", $name)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateMobile($mobile) {
+        if(!preg_match("/^\+?\d{12}$/", $mobile)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateEmail($email) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+
+        return true;
+    }
+
