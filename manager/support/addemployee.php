@@ -170,6 +170,8 @@
             $error4 = false;
         }
 
+        
+
         // if(!preg_match("/^\+?\d{12}$/", $mobile)) {
         //     echo '
         //         <script>
