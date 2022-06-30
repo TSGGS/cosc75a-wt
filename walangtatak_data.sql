@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 18, 2022 at 06:24 AM
+-- Generation Time: Jun 30, 2022 at 03:56 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.7
 
@@ -24,20 +24,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `address`
---
-
-CREATE TABLE `address` (
-  `address_id` int(11) NOT NULL,
-  `address_home` varchar(100) NOT NULL,
-  `address_barangay` varchar(100) NOT NULL,
-  `address_city` varchar(100) NOT NULL,
-  `address_province` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `credentials`
 --
 
@@ -53,23 +39,10 @@ CREATE TABLE `credentials` (
 --
 
 INSERT INTO `credentials` (`credential_id`, `credential_employee_id`, `credential_password`, `credential_last_login`) VALUES
-(1, 4, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-01-18 04:11:56'),
-(2, 1, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-01-17 02:13:16'),
-(3, 2, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', NULL),
-(4, 3, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-01-18 00:46:40');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `customers`
---
-
-CREATE TABLE `customers` (
-  `customer_id` int(11) NOT NULL,
-  `customer_firstname` varchar(50) NOT NULL,
-  `customer_lastname` varchar(50) NOT NULL,
-  `customer_lastorder` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+(1, 4, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-06-30 13:32:06'),
+(2, 1, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-06-28 12:51:56'),
+(3, 2, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-06-30 12:25:42'),
+(4, 3, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-01-18 23:47:24');
 
 -- --------------------------------------------------------
 
@@ -139,9 +112,11 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`inventory_id`, `inventory_product_id`, `inventory_product_count`, `inventory_timestamp`) VALUES
-(1, 1, 10, NULL),
-(2, 2, 10, NULL),
-(3, 3, 10, NULL);
+(1, 1, 1, '2022-01-18 15:56:39'),
+(2, 2, 3, '2022-01-18 15:56:39'),
+(3, 3, 1, '2022-01-18 15:56:39'),
+(4, 4, 1, '2022-01-18 15:56:40'),
+(5, 5, 1, '2022-01-18 15:56:40');
 
 -- --------------------------------------------------------
 
@@ -151,10 +126,10 @@ INSERT INTO `inventory` (`inventory_id`, `inventory_product_id`, `inventory_prod
 
 CREATE TABLE `orders` (
   `order_id` int(11) NOT NULL,
-  `order_customer_id` int(11) NOT NULL,
+  `order_customer_name` varchar(100) NOT NULL,
   `order_total_price` int(11) NOT NULL,
   `order_mobile_number` varchar(11) NOT NULL,
-  `order_address_id` int(11) NOT NULL,
+  `order_address` varchar(255) NOT NULL,
   `order_delivery_date` date NOT NULL,
   `order_handler_employee_id` int(11) NOT NULL,
   `order_status_id` int(11) NOT NULL,
@@ -209,7 +184,9 @@ CREATE TABLE `prices` (
 INSERT INTO `prices` (`price_id`, `price_product_id`, `price_amount`, `price_start_timestamp`, `price_end_timestamp`) VALUES
 (1, 1, 1300, '2022-01-17 02:22:08', NULL),
 (2, 2, 1300, '2022-01-17 02:36:33', NULL),
-(3, 3, 280, '2022-01-17 04:01:54', NULL);
+(3, 3, 280, '2022-01-17 04:01:54', NULL),
+(4, 4, 280, '2022-01-18 05:40:15', NULL),
+(5, 5, 1300, '2022-01-18 15:55:42', NULL);
 
 -- --------------------------------------------------------
 
@@ -235,7 +212,9 @@ CREATE TABLE `products` (
 INSERT INTO `products` (`product_id`, `product_code`, `product_name`, `product_type`, `product_description`, `product_image`, `product_start_timestamp`, `product_end_timestamp`) VALUES
 (1, 'NYCB', 'New York Style Cheesecake - Blueberry', 2, 'New York Style Cheesecake - Blueberry', '20220117102208_61e4d2d0485be.jpg', '2022-01-17 02:22:08', NULL),
 (2, 'NYCS', 'New York Style Cheesecake - Strawberry', 2, 'New York Style Cheesecake - Strawberry', '20220117103632_61e4d630d7d7b.jpeg', '2022-01-17 02:36:32', NULL),
-(3, 'BBYC', 'Baby Cheesecake', 2, '6 pcs New York Style Cheesecake in different flavors', '20220117120154_61e4ea32b1987.jpeg', '2022-01-17 04:01:54', NULL);
+(3, 'BBYC', 'Baby Cheesecake', 2, '6 pcs New York Style Cheesecake in different flavors', '20220117120154_61e4ea32b1987.jpeg', '2022-01-17 04:01:54', NULL),
+(4, 'KCP6', 'Krispy Cream Puffs', 4, 'Krispy Cream Puffs', '20220118134015_61e652bf3ae0d.JPG', '2022-01-18 05:40:15', NULL),
+(5, 'NYCM', 'New York Style Cheesecake - Mango', 2, 'New York Style Cheesecake - Mango', '20220118235542_61e6e2fe49064.jpg', '2022-01-18 15:55:42', NULL);
 
 -- --------------------------------------------------------
 
@@ -309,23 +288,11 @@ INSERT INTO `types` (`type_id`, `type_name`) VALUES
 --
 
 --
--- Indexes for table `address`
---
-ALTER TABLE `address`
-  ADD PRIMARY KEY (`address_id`);
-
---
 -- Indexes for table `credentials`
 --
 ALTER TABLE `credentials`
   ADD PRIMARY KEY (`credential_id`),
   ADD KEY `credential_employee_id` (`credential_employee_id`);
-
---
--- Indexes for table `customers`
---
-ALTER TABLE `customers`
-  ADD PRIMARY KEY (`customer_id`);
 
 --
 -- Indexes for table `discounts`
@@ -352,8 +319,6 @@ ALTER TABLE `inventory`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`order_id`),
-  ADD KEY `cutsomer_id` (`order_customer_id`),
-  ADD KEY `address_id` (`order_address_id`),
   ADD KEY `employee_handler` (`order_handler_employee_id`);
 
 --
@@ -415,22 +380,10 @@ ALTER TABLE `types`
 --
 
 --
--- AUTO_INCREMENT for table `address`
---
-ALTER TABLE `address`
-  MODIFY `address_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `credentials`
 --
 ALTER TABLE `credentials`
   MODIFY `credential_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `customers`
---
-ALTER TABLE `customers`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `discounts`
@@ -442,13 +395,13 @@ ALTER TABLE `discounts`
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `employee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `employee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -472,13 +425,13 @@ ALTER TABLE `password_reset`
 -- AUTO_INCREMENT for table `prices`
 --
 ALTER TABLE `prices`
-  MODIFY `price_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `price_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `promotions`
@@ -530,8 +483,6 @@ ALTER TABLE `inventory`
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `address_id` FOREIGN KEY (`order_address_id`) REFERENCES `address` (`address_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `cutsomer_id` FOREIGN KEY (`order_customer_id`) REFERENCES `customers` (`customer_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `employee_handler` FOREIGN KEY (`order_handler_employee_id`) REFERENCES `employees` (`employee_id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --

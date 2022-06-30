@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 17, 2022 at 03:31 AM
+-- Generation Time: Jun 30, 2022 at 03:57 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.7
 
@@ -24,20 +24,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `address`
---
-
-CREATE TABLE `address` (
-  `address_id` int(11) NOT NULL,
-  `address_home` varchar(100) NOT NULL,
-  `address_barangay` varchar(100) NOT NULL,
-  `address_city` varchar(100) NOT NULL,
-  `address_province` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `credentials`
 --
 
@@ -53,21 +39,10 @@ CREATE TABLE `credentials` (
 --
 
 INSERT INTO `credentials` (`credential_id`, `credential_employee_id`, `credential_password`, `credential_last_login`) VALUES
-(1, 2, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-01-17 02:10:40'),
-(2, 3, '$2y$10$Ds.IswATt..znp0/iXrV0Ouu2SJGzDUoNGBxqtpOQ27/KLVocnDtG', '2022-01-17 02:13:16');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `customers`
---
-
-CREATE TABLE `customers` (
-  `customer_id` int(11) NOT NULL,
-  `customer_firstname` varchar(50) NOT NULL,
-  `customer_lastname` varchar(50) NOT NULL,
-  `customer_lastorder` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+(1, 4, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-06-30 13:32:06'),
+(2, 1, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-06-28 12:51:56'),
+(3, 2, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-06-30 12:25:42'),
+(4, 3, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-01-18 23:47:24');
 
 -- --------------------------------------------------------
 
@@ -93,10 +68,10 @@ CREATE TABLE `employees` (
   `employee_id` int(11) NOT NULL,
   `employee_firstname` varchar(50) NOT NULL,
   `employee_lastname` varchar(50) NOT NULL,
-  `employee_mobile_number` varchar(11) NOT NULL,
+  `employee_mobile_number` varchar(15) NOT NULL,
   `employee_email_address` varchar(65) NOT NULL,
   `employee_team_id` int(11) NOT NULL,
-  `employee_account_start` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `employee_account_start` timestamp NOT NULL DEFAULT current_timestamp(),
   `employee_account_end` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -105,8 +80,10 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`employee_id`, `employee_firstname`, `employee_lastname`, `employee_mobile_number`, `employee_email_address`, `employee_team_id`, `employee_account_start`, `employee_account_end`) VALUES
-(2, 'Support', 'Root', '', '', 4, '2022-01-17 02:09:43', NULL),
-(3, 'Administration', 'Root', '', '', 1, '2022-01-17 02:12:12', NULL);
+(1, 'Administration', 'Root', '+639123456789', 'admin@wt.com', 1, '2022-01-18 00:34:51', NULL),
+(2, 'Operation', 'Root', '+639123456789', 'ops@wt.com', 2, '2022-01-17 09:00:10', NULL),
+(3, 'Marketing', 'Root', '+639123456789', 'marketing@wt.com', 3, '2022-01-17 09:00:10', NULL),
+(4, 'Support', 'Root', '+639123456789', 'support@wt.com', 4, '2022-01-17 08:58:47', NULL);
 
 -- --------------------------------------------------------
 
@@ -126,7 +103,11 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`inventory_id`, `inventory_product_id`, `inventory_product_count`, `inventory_timestamp`) VALUES
-(1, 1, 0, NULL);
+(1, 1, 1, '2022-01-18 15:56:39'),
+(2, 2, 3, '2022-01-18 15:56:39'),
+(3, 3, 1, '2022-01-18 15:56:39'),
+(4, 4, 1, '2022-01-18 15:56:40'),
+(5, 5, 1, '2022-01-18 15:56:40');
 
 -- --------------------------------------------------------
 
@@ -136,10 +117,10 @@ INSERT INTO `inventory` (`inventory_id`, `inventory_product_id`, `inventory_prod
 
 CREATE TABLE `orders` (
   `order_id` int(11) NOT NULL,
-  `order_customer_id` int(11) NOT NULL,
+  `order_customer_name` varchar(100) NOT NULL,
   `order_total_price` int(11) NOT NULL,
   `order_mobile_number` varchar(11) NOT NULL,
-  `order_address_id` int(11) NOT NULL,
+  `order_address` varchar(255) NOT NULL,
   `order_delivery_date` date NOT NULL,
   `order_handler_employee_id` int(11) NOT NULL,
   `order_status_id` int(11) NOT NULL,
@@ -276,12 +257,6 @@ INSERT INTO `types` (`type_id`, `type_name`) VALUES
 --
 
 --
--- Indexes for table `address`
---
-ALTER TABLE `address`
-  ADD PRIMARY KEY (`address_id`);
-
---
 -- Indexes for table `credentials`
 --
 ALTER TABLE `credentials`
@@ -289,10 +264,10 @@ ALTER TABLE `credentials`
   ADD KEY `credential_employee_id` (`credential_employee_id`);
 
 --
--- Indexes for table `customers`
+-- Indexes for table `discounts`
 --
-ALTER TABLE `customers`
-  ADD PRIMARY KEY (`customer_id`);
+ALTER TABLE `discounts`
+  ADD PRIMARY KEY (`discount_id`);
 
 --
 -- Indexes for table `employees`
@@ -313,8 +288,6 @@ ALTER TABLE `inventory`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`order_id`),
-  ADD KEY `cutsomer_id` (`order_customer_id`),
-  ADD KEY `address_id` (`order_address_id`),
   ADD KEY `employee_handler` (`order_handler_employee_id`);
 
 --
@@ -376,34 +349,28 @@ ALTER TABLE `types`
 --
 
 --
--- AUTO_INCREMENT for table `address`
---
-ALTER TABLE `address`
-  MODIFY `address_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `credentials`
 --
 ALTER TABLE `credentials`
-  MODIFY `credential_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `credential_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `customers`
+-- AUTO_INCREMENT for table `discounts`
 --
-ALTER TABLE `customers`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `discounts`
+  MODIFY `discount_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `employee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `employee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -485,8 +452,6 @@ ALTER TABLE `inventory`
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `address_id` FOREIGN KEY (`order_address_id`) REFERENCES `address` (`address_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `cutsomer_id` FOREIGN KEY (`order_customer_id`) REFERENCES `customers` (`customer_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `employee_handler` FOREIGN KEY (`order_handler_employee_id`) REFERENCES `employees` (`employee_id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
