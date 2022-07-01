@@ -107,7 +107,7 @@
     }
 
     function validateName($name) {
-        if(!preg_match("\b[A-Z][a-z]*( [A-Z][a-z]*)*\b", $name)) {
+        if(!preg_match("/\b[A-Z][a-z]*( [A-Z][a-z]*)*\b/", $name)) {
             return false;
         }
 

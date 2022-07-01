@@ -126,51 +126,118 @@
         $team = $_POST["new-employee-team"];
         $password = $_POST["new-employee-password"];
 
-        if(!validateName($fname) || !validateName($lname)) {
+        if(!(validateName($fname) && validateName($lname))) {
             echo '
                 <script>
-                    toggleError(new-employee-name-error, show);
+                    toggleError("new-employee-name-error", "show");
                 </script>
             ';
             $error1 = true;
         } else {
+            echo '
+                <script>
+                    toggleError("new-employee-name-error", "hide");
+                </script>
+            ';
             $error1 = false;
         }
 
+        
         if(!validateMobile($mobile)) {
             echo '
                 <script>
-                    toggleError(new-employee-mobile-error, show);
+                    toggleError("new-employee-mobile-error", "show");
                 </script>
             ';
             $error2 = true;
         } else {
+            echo '
+                <script>
+                    toggleError("new-employee-mobile-error", "hide");
+                </script>
+            ';
             $error2 = false;
         }
 
-        if(!validateMobile($email)) {
+        $sql = "SELECT employee_email_address FROM employees WHERE employee_email_address=?";
+        $result = prepareSQL($conn, $sql, "s", $email);
+        if(!validateEmail($email) || mysqli_num_rows($result) > 0) {
             echo '
                 <script>
-                    toggleError(new-employee-email-error, show);
+                    toggleError("new-employee-email-error", "show");
                 </script>
             ';
             $error3 = true;
         } else {
+            echo '
+                <script>
+                    toggleError("new-employee-email-error", "hide");
+                </script>
+            ';
             $error3 = false;
+        }
+
+        if(empty($_POST["new-employee-team"])) {
+            echo '
+                <script>
+                    toggleError("new-employee-team-error", "show");
+                </script>
+            ';
+            $error4 = true;
+        } else {
+            echo '
+                <script>
+                    toggleError("new-employee-team-error", "hide");
+                </script>
+            ';
+            $error4 = false;
         }
         
         if(!validatePassword($password)) {
             echo '
                 <script>
-                    toggleError(new-employee-password-error, show);
+                    toggleError("new-employee-password-error", "show");
                 </script>
             ';
-            $error4 = true;
+            $error5 = true;
         } else {
-            $error4 = false;
+            echo '
+                <script>
+                    toggleError("new-employee-password-error", "hide");
+                </script>
+            ';
+            $error5 = false;
         }
 
-        
+        if(!($error1 || $error2 || $error3 || $error4 || $error5)) {
+            $sql = "INSERT INTO employees VALUES (NULL, ?, ?, ?, ?, ?, NULL, NULL)";
+            prepareSQL($conn, $sql, "ssssi", $fname, $lname, $mobile, $email, $team);
+
+            $sql = "SELECT employee_id FROM employees WHERE employee_email_address=?";
+            $eidRes = prepareSQL($conn, $sql, "s", $email);
+            $employeeID = mysqli_fetch_array($eidRes);
+
+            $sql = "INSERT INTO credentials VALUES (NULL, ?, ?, NULL)";
+            prepareSQL($conn, $sql, "is", $employeeID["employee_id"], password_hash($password, PASSWORD_DEFAULT));
+
+            echo '
+                <script>
+                    window.location.replace("dashboard.php");
+                </script>
+            ';
+
+        } else {
+            echo '
+                <script>
+                    document.getElementById("new-employee-fname").value = '.json_encode($fname).';
+                    document.getElementById("new-employee-lname").value = '.json_encode($lname).';
+                    document.getElementById("new-employee-mobile").value = '.json_encode($mobile).';
+                    document.getElementById("new-employee-email").value = '.json_encode($email).';
+                </script>
+            ';
+        }
+
+
 
         // if(!preg_match("/^\+?\d{12}$/", $mobile)) {
         //     echo '
