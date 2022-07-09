@@ -222,15 +222,15 @@
                 $itemID = mysqli_fetch_array($result);
                 $itemID = $itemID["product_id"];
 
-                $sql = "INSERT INTO order_items VALUES (NULL, ?, ?)";
-                prepareSQL($conn, $sql, "is", $orderCustID, $itemID);
+                $sql = "INSERT INTO order_items VALUES (NULL, ?, ?, ?)";
+                prepareSQL($conn, $sql, "isi", $orderCustID, $itemID,$_SESSION["cartInfo"][$item]["count"]);
             }
 
-            unset($_SESSION["cartList"], $_SESSION["cartCount"]);
+            unset($_SESSION["cartList"], $_SESSION["cartCount"], $_SESSION["cartInfo"], $_SESSION["GRANDTOTAL"], $_SESSION["discountCode"]);
             echo '
                 <script>
-                    let itemCount = document.getElementById("cart-count");
-                    itemCount.value = 0;
+                    // let itemCount = document.getElementById("cart-count");
+                    // itemCount.value = 0;
                     window.location.href = "thank-you.php";
                 </script>
             ';

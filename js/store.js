@@ -22,7 +22,7 @@ function addtoCart(prod) {
     xhr.send(jsonString);
 }
 
-let list = [];
+let list = {};
 let GrandTotal = 0;
 let discount = 0;
 function updateQty(code, price) {
@@ -208,7 +208,8 @@ function removeDiscount() {
 
 function placeOrder() {
     let packet = {
-        "type": "order-total",
+        "type": "order",
+        "list": list,
         "amount": GrandTotal
     };
 

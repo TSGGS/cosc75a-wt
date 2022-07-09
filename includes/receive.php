@@ -26,8 +26,8 @@
             removeDiscount($prodInfo["code"]);
             break;
 
-        case "order-total":
-            setTotalAmount($prodInfo["amount"]);
+        case "order":
+            setOrder($prodInfo["amount"],$prodInfo["list"]);
             break;
         
         default:
@@ -75,6 +75,7 @@
             if (in_array($prod, $_SESSION["cartList"])) {
                 $index = array_search($prod, $_SESSION["cartList"]);
                 unset($_SESSION["cartList"][$index]);
+                unset($_SESSION["cartInfo"][$prod]);
                 $_SESSION["cartList"] = array_merge($_SESSION["cartList"]);
                 $_SESSION["cartCount"] = count($_SESSION["cartList"]);
             }
@@ -130,6 +131,7 @@
         unset($_SESSION["discountCode"]);
     }
 
-    function setTotalAmount($amount) {
+    function setOrder($amount, $list) {
+        $_SESSION["cartInfo"] = $list;
         $_SESSION["GRANDTOTAL"] = $amount;
     }
