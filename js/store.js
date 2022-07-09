@@ -23,6 +23,8 @@ function addtoCart(prod) {
 }
 
 let list = [];
+let GrandTotal = 0;
+let discount = 0;
 function updateQty(code, price) {
     let qty = document.getElementById(code+"-qty");
     let display = document.getElementById(code+"-total");
@@ -86,7 +88,10 @@ function updateTotal() {
         grandTotal += itemTotal;
     }
 
-    displayTotal.innerHTML = "₱ "+grandTotal;
+    grandTotal = grandTotal - (grandTotal * (discount / 100));
+
+    GrandTotal = Math.ceil(grandTotal);
+    displayTotal.innerHTML = "₱ "+GrandTotal;
 }
 
 function deleteItem(code) {
@@ -119,8 +124,12 @@ function removeTotal() {
     if(Object.keys(list).length  == 0) {
         let area = document.getElementById("cart-item-area");
         let row = document.getElementById("grandTotalRow");
+        let discount = document.getElementById("discountRow");
+        let button = document.getElementById("orderButtonRow");
 
         row.parentNode.removeChild(row);
+        discount.parentNode.removeChild(discount);
+        button.parentNode.removeChild(button);
 
         let noItem = document.createElement("div");
         let noItemContent = document.createElement("div");
@@ -132,4 +141,129 @@ function removeTotal() {
         noItem.appendChild(noItemContent);
         area.appendChild(noItem);
     } 
+}
+
+function applyDiscount() {
+    let applyBtn = document.getElementById("apply-discount");
+    let removeBtn = document.getElementById("remove-discount");
+    let codeInputBox = document.getElementById("apply-discount-code");
+    let code = codeInputBox.value;
+
+    if(code != "") {
+        let product = {
+            "type": "discount",
+            "code": code
+        };
+    
+        let xhr = new XMLHttpRequest();
+        let jsonString = JSON.stringify(product);
+        let url = "includes/receive.php";
+    
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+    
+        xhr.responseType = "json";
+        xhr.onload = function (){
+            let response = xhr.response;
+            if (response["status"] == "VALID") {
+                discount = response["percent"];
+                updateTotal();
+                codeInputBox.readOnly = true;
+                applyBtn.style.display = "none";
+                removeBtn.style.display = "";
+            }
+        };
+    
+        xhr.send(jsonString);
+    }
+}
+
+function removeDiscount() {
+    let applyBtn = document.getElementById("apply-discount");
+    let removeBtn = document.getElementById("remove-discount");
+    let codeInputBox = document.getElementById("apply-discount-code");
+    let code = codeInputBox.value;
+
+    let packet = {
+        "type": "remove-discount",
+        "code": code
+    };
+
+    let xhr = new XMLHttpRequest();
+    let jsonString = JSON.stringify(packet);
+    let url = "includes/receive.php";
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(jsonString);
+
+    discount = 0;
+    updateTotal();
+    removeBtn.style.display = "none";
+    applyBtn.style.display = "";
+    codeInputBox.readOnly = false;
+    codeInputBox.value = "";
+    
+}
+
+function placeOrder() {
+    let packet = {
+        "type": "order-total",
+        "amount": GrandTotal
+    };
+
+    let xhr = new XMLHttpRequest();
+    let jsonString = JSON.stringify(packet);
+    let url = "includes/receive.php";
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(jsonString);
+
+    window.location.href = 'customer.php';
+}
+
+function checkedCheckbox() {
+    let checkBox = document.getElementById("customer-time-asap");
+    let date = document.getElementById("customer-date");
+    let time = document.getElementById("customer-time");
+
+    if(checkBox.checked == true) {
+        let cur = new Date();
+
+        date.value = cur.toISOString().split("T")[0]
+        time.value = "";
+        date.readOnly = true;
+        time.readOnly = true;
+    } else {
+        date.readOnly= false;
+        time.readOnly= false;
+    }
+}
+
+function checkASAP() {
+    let cur = new Date();
+    let date = document.getElementById("customer-date");
+    let time = document.getElementById("customer-time");
+    let checkBox = document.getElementById("customer-time-asap");
+
+    let custDate = new Date(date.value);
+    let timeSplit = String(time.value).split(":");
+    custDate.setHours(parseInt(timeSplit[0]), parseInt(timeSplit[1]), 0, 0);
+
+    cur.setMinutes(cur.getMinutes()+10, 0, 0);
+
+    if(custDate.valueOf() < cur.valueOf()) {
+        checkBox.checked = true;
+        checkedCheckbox();
+    }
+
+}
+
+function toggleError(element_id, action) {
+    if(action === "show") {
+        document.getElementById(element_id).classList.remove("d-none");
+    } else {
+        document.getElementById(element_id).classList.add("d-none");
+    }
 }

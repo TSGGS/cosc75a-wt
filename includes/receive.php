@@ -17,6 +17,18 @@
         case "delete":
             deleteItem($prodInfo["product"]);
             break;
+
+        case "discount":
+            checkDiscount($prodInfo["code"]);
+            break;
+
+        case "remove-discount":
+            removeDiscount($prodInfo["code"]);
+            break;
+
+        case "order-total":
+            setTotalAmount($prodInfo["amount"]);
+            break;
         
         default:
             break;
@@ -63,6 +75,7 @@
             if (in_array($prod, $_SESSION["cartList"])) {
                 $index = array_search($prod, $_SESSION["cartList"]);
                 unset($_SESSION["cartList"][$index]);
+                $_SESSION["cartList"] = array_merge($_SESSION["cartList"]);
                 $_SESSION["cartCount"] = count($_SESSION["cartList"]);
             }
         }
@@ -73,4 +86,50 @@
 
         header("Content-type: application/json");
         echo json_encode($response);
+    }
+
+    function checkDiscount($code) {
+        require ("db.php");
+
+        $sql = "SELECT * FROM discounts WHERE discount_code=?";
+        $result = prepareSQL($conn, $sql, "s", $code);
+
+        $status = "INVALID";
+        $percent = 0;
+
+        $disc = mysqli_fetch_array($result);
+
+        if(mysqli_num_rows($result) == 0) {
+            $status = "INVALID";
+        } else {
+            $ll = date("Y-m-d H:i:s", strtotime($disc["discount_start_timestamp"]));
+            if ($disc["discount_end_timestamp"] == NULL) {
+                $hl = date("Y-m-d H:i:s", strtotime("9999-12-31 23:59:59"));
+            } else {
+                $hl = date("Y-m-d H:i:s", strtotime($disc["discount_end_timestamp"]));
+            }
+            $cv = date("Y-m-d H:i:s");
+
+            if($ll <= $cv && $hl >= $cv) {
+                $status = "VALID";
+                $percent = $disc["discount_amount"];
+                $_SESSION["discountCode"] = $code;
+            }
+        }
+
+        $response = array(
+            "status" => $status,
+            "percent" => $percent
+        );
+
+        header("Content-type: application/json");
+        echo json_encode($response);
+    }
+
+    function removeDiscount($code) {
+        unset($_SESSION["discountCode"]);
+    }
+
+    function setTotalAmount($amount) {
+        $_SESSION["GRANDTOTAL"] = $amount;
     }

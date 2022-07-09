@@ -107,7 +107,15 @@
     }
 
     function validateName($name) {
-        if(!preg_match("/\b[A-Z][a-z]*( [A-Z][a-z]*)*\b/", $name)) {
+        if(!preg_match("/^[^-\s][a-zA-Z .'-]+$/", $name)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateAddress($addr) {
+        if(!preg_match("/^[^-\s][a-zA-Z0-9 ,.'-]+$/", $addr)) {
             return false;
         }
 
@@ -124,6 +132,17 @@
 
     function validateEmail($email) {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateCustDate($date, $time) {
+        $cur = strtotime(date("Y-m-d H:i"));
+        $custDate = strtotime(date("Y-m-d H:i", strtotime("$date $time")));
+
+        if($custDate < $cur) {
             return false;
         }
 

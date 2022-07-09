@@ -65,15 +65,6 @@
                     ';
                 }
             }
-            else {
-                echo '
-                    <div class="row mt-3" id="cart-no-item">
-                        <div class="col text-center">
-                            There is no product added to cart 
-                        </div>
-                    </div>
-                ';
-            }
         ?>
         <div class="row text-center" id="grandTotalRow">
             <div class="col-1">
@@ -91,7 +82,52 @@
             <div class="col-1">
             </div>
         </div>
+        <div class="row mt-3" id="discountRow">
+		    <div class="col-1">
+            </div>
+            <div class="col">
+            </div>
+			<div class="col">
+            </div>
+            <div class="col">
+            </div>
+            <div class="col">
+            </div>
+            <div class="col">
+            </div>
+            
+			<div class="col">
+            <label class="col-form-label" for="apply-discount-code">Discount Code</label>
+            </div>
+            <div class="col-2">
+		        <input type="text" class="form-control" name="apply-discount-code" id="apply-discount-code">
+            </div>
+			<div class="col-1">
+		        <button type="button" class="btn btn-dark" id="apply-discount" onclick="applyDiscount();" onchange="applyDiscount();">Apply</button>
+                <button type="button" class="btn btn-danger" style="display:none;" id="remove-discount" onclick="removeDiscount();">Clear</button>
+            </div>
+        </div>
+        <div class="row mt-3" id="orderButtonRow">
+		    <div class="col-1">
+            </div>
+			<div class="col">
+            </div>
+			<div class="col">
+            </div>
+			<div class="col">
+            </div>
+			<div class="col-3">
+		        <button type="button" class="btn btn-dark" onclick="placeOrder();">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Place Order&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+            </div>					   
+        </div>
     </div>
-    <script>
-        removeTotal();
-    </script>
+<?php
+    echo '
+        <script>
+            removeTotal();
+            
+            let elmt = document.getElementById("apply-discount-code");
+            elmt.value = "'.(isset($_SESSION["discountCode"]) ? $_SESSION["discountCode"] : "").'";
+            applyDiscount();
+        </script>     
+    ';
