@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 09, 2022 at 10:32 AM
+-- Generation Time: Jul 09, 2022 at 07:22 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.7
 
@@ -139,7 +139,8 @@ CREATE TABLE `orders` (
 CREATE TABLE `order_items` (
   `order_item_id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
-  `order_product_id` int(11) NOT NULL
+  `order_product_id` int(11) NOT NULL,
+  `order_product_quantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
