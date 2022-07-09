@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 30, 2022 at 03:56 PM
+-- Generation Time: Jul 09, 2022 at 10:32 AM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.7
 
@@ -40,9 +40,10 @@ CREATE TABLE `credentials` (
 
 INSERT INTO `credentials` (`credential_id`, `credential_employee_id`, `credential_password`, `credential_last_login`) VALUES
 (1, 4, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-06-30 13:32:06'),
-(2, 1, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-06-28 12:51:56'),
-(3, 2, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-06-30 12:25:42'),
-(4, 3, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-01-18 23:47:24');
+(2, 1, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-07-08 10:06:04'),
+(3, 2, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-07-08 10:05:55'),
+(4, 3, '$2y$10$VzaQM0r3NSKGcWb4zD3gceL1eGBV9rk3hjAUWqK4pnTGgqQCTTMra', '2022-01-18 23:47:24'),
+(5, 6, '$2y$10$c8tqf9x3vshJdvq5qjj5fOZtyGlvCVWWbt6O2Jr9CaJtcaQdK6V3y', '2022-07-01 09:41:33');
 
 -- --------------------------------------------------------
 
@@ -64,8 +65,7 @@ CREATE TABLE `discounts` (
 
 INSERT INTO `discounts` (`discount_id`, `discount_code`, `discount_amount`, `discount_start_timestamp`, `discount_end_timestamp`) VALUES
 (1, 'D1', 10, '2022-01-17 11:03:12', NULL),
-(2, 'D1', 10, '2022-01-17 11:05:18', NULL),
-(3, 'D2', 20, '2022-01-18 11:35:00', '2022-01-20 11:36:00');
+(3, 'D2', 20, '2022-07-08 10:02:06', NULL);
 
 -- --------------------------------------------------------
 
@@ -92,7 +92,8 @@ INSERT INTO `employees` (`employee_id`, `employee_firstname`, `employee_lastname
 (1, 'Administration', 'Root', '+639123456789', 'admin@wt.com', 1, '2022-01-18 00:34:51', NULL),
 (2, 'Operation', 'Root', '+639123456789', 'ops@wt.com', 2, '2022-01-17 09:00:10', NULL),
 (3, 'Marketing', 'Root', '+639123456789', 'marketing@wt.com', 3, '2022-01-17 09:00:10', NULL),
-(4, 'Support', 'Root', '+639123456789', 'support@wt.com', 4, '2022-01-17 08:58:47', NULL);
+(4, 'Support', 'Root', '+639123456789', 'support@wt.com', 4, '2022-01-17 08:58:47', NULL),
+(6, 'Gio Lorenzo', 'Sauquillo', '+639123456789', 'gio@wt.com', 4, '2022-07-01 09:39:19', NULL);
 
 -- --------------------------------------------------------
 
@@ -116,7 +117,8 @@ INSERT INTO `inventory` (`inventory_id`, `inventory_product_id`, `inventory_prod
 (2, 2, 3, '2022-01-18 15:56:39'),
 (3, 3, 1, '2022-01-18 15:56:39'),
 (4, 4, 1, '2022-01-18 15:56:40'),
-(5, 5, 1, '2022-01-18 15:56:40');
+(5, 5, 1, '2022-01-18 15:56:40'),
+(6, 6, 10, '2022-07-08 10:10:00');
 
 -- --------------------------------------------------------
 
@@ -128,12 +130,12 @@ CREATE TABLE `orders` (
   `order_id` int(11) NOT NULL,
   `order_customer_name` varchar(100) NOT NULL,
   `order_total_price` int(11) NOT NULL,
-  `order_mobile_number` varchar(11) NOT NULL,
+  `order_mobile_number` varchar(15) NOT NULL,
   `order_address` varchar(255) NOT NULL,
   `order_delivery_date` date NOT NULL,
-  `order_handler_employee_id` int(11) NOT NULL,
+  `order_handler_employee_id` int(11) DEFAULT NULL,
   `order_status_id` int(11) NOT NULL,
-  `order_timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `order_timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -186,7 +188,8 @@ INSERT INTO `prices` (`price_id`, `price_product_id`, `price_amount`, `price_sta
 (2, 2, 1300, '2022-01-17 02:36:33', NULL),
 (3, 3, 280, '2022-01-17 04:01:54', NULL),
 (4, 4, 280, '2022-01-18 05:40:15', NULL),
-(5, 5, 1300, '2022-01-18 15:55:42', NULL);
+(5, 5, 1300, '2022-01-18 15:55:42', NULL),
+(6, 6, 75, '2022-07-08 10:07:51', NULL);
 
 -- --------------------------------------------------------
 
@@ -214,7 +217,8 @@ INSERT INTO `products` (`product_id`, `product_code`, `product_name`, `product_t
 (2, 'NYCS', 'New York Style Cheesecake - Strawberry', 2, 'New York Style Cheesecake - Strawberry', '20220117103632_61e4d630d7d7b.jpeg', '2022-01-17 02:36:32', NULL),
 (3, 'BBYC', 'Baby Cheesecake', 2, '6 pcs New York Style Cheesecake in different flavors', '20220117120154_61e4ea32b1987.jpeg', '2022-01-17 04:01:54', NULL),
 (4, 'KCP6', 'Krispy Cream Puffs', 4, 'Krispy Cream Puffs', '20220118134015_61e652bf3ae0d.JPG', '2022-01-18 05:40:15', NULL),
-(5, 'NYCM', 'New York Style Cheesecake - Mango', 2, 'New York Style Cheesecake - Mango', '20220118235542_61e6e2fe49064.jpg', '2022-01-18 15:55:42', NULL);
+(5, 'NYCM', 'New York Style Cheesecake - Mango', 2, 'New York Style Cheesecake - Mango', '20220118235542_61e6e2fe49064.jpg', '2022-01-18 15:55:42', NULL),
+(6, 'SBC', 'SansriBites - Classic', 2, 'SansriBites - Classic', '20220708180751_62c801f747c3a.jpg', '2022-07-08 10:07:51', NULL);
 
 -- --------------------------------------------------------
 
@@ -240,6 +244,15 @@ CREATE TABLE `status` (
   `status_id` int(11) NOT NULL,
   `status_name` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `status`
+--
+
+INSERT INTO `status` (`status_id`, `status_name`) VALUES
+(1, 'AWAITING CONFIRMATION'),
+(2, 'ACCEPTED'),
+(3, 'REJECTED');
 
 -- --------------------------------------------------------
 
@@ -383,7 +396,7 @@ ALTER TABLE `types`
 -- AUTO_INCREMENT for table `credentials`
 --
 ALTER TABLE `credentials`
-  MODIFY `credential_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `credential_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `discounts`
@@ -395,25 +408,25 @@ ALTER TABLE `discounts`
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `employee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `employee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `order_item_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `order_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `password_reset`
@@ -425,13 +438,13 @@ ALTER TABLE `password_reset`
 -- AUTO_INCREMENT for table `prices`
 --
 ALTER TABLE `prices`
-  MODIFY `price_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `price_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `promotions`
@@ -443,7 +456,7 @@ ALTER TABLE `promotions`
 -- AUTO_INCREMENT for table `status`
 --
 ALTER TABLE `status`
-  MODIFY `status_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `status_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `teams`
