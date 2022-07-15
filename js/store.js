@@ -1,3 +1,12 @@
+function destroyPromotion() {
+    let modal = document.getElementById("modal");
+    let promotion = document.getElementById("promotion");
+
+    promotion.parentNode.removeChild(promotion);
+    modal.parentNode.removeChild(modal);
+    document.body.style.overflow = "scroll";
+}
+
 function addtoCart(prod) {
     let counter = document.getElementById("cart-count");
     let product = {

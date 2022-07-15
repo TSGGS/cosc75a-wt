@@ -107,7 +107,7 @@
                 <button type="button" class="btn btn-danger" style="display:none;" id="remove-discount" onclick="removeDiscount();">Clear</button>
             </div>
         </div>
-        <div class="row mt-3" id="orderButtonRow">
+        <div class="row mt-3 mb-3" id="orderButtonRow">
 		    <div class="col-1">
             </div>
 			<div class="col">
