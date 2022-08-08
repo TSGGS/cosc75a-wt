@@ -54,6 +54,15 @@ button {
     padding-top: 1vh;
 }
 
+.btn-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.circular {
+    border-radius: 20px;
+}
+
 .col-title {
     width: 20% !important;
 }
@@ -71,13 +80,23 @@ button {
     height: 8vh;
 }
 
+.error {
+    color: red !important;
+}
+
 .logo {
     width: 6vw;
     height: 12vh;
 }
 
-.error {
-    color: red !important;
+.my-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.65);
 }
 
 .update-image-display {
@@ -89,4 +108,37 @@ button {
 /* IDs */
 #login {
     height: 60vh !important;
+}
+
+#orderFull {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1100;
+    width: 50%;
+    height: 80%;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    overflow-y: scroll;
+}
+
+#orderFull::-webkit-scrollbar {
+    opacity: 0;
+}
+
+#close {
+    position: sticky;
+    top: 10px;
+    width: 15px;
+    height: 15px;
+    float: right;
+}
+
+#info {
+    margin: 10px 20px;
+}
+
+#btn-decline {
+    border: #dc3545 !important;
 }

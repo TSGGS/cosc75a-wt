@@ -96,7 +96,7 @@
                     </div>
                 </div>
             </div>
-                <div class="row">
+            <div class="row">
                 <div class="col-4 col-title-large">
                     <label class="col-form-label" for="new-employee-password"><h4>Temporary Password</h4></label>
                 </div>
@@ -104,9 +104,9 @@
                     <div class="row">
                             <input type="password" class="form-control" name="new-employee-password" id="new-employee-password" required>
                         </div>
-                        <div class="row mb-2 d-none error" id="new-employee-password-error">
-                            Invalid Password
-                        </div>
+                    <div class="row mb-2 d-none error" id="new-employee-password-error">
+                        Invalid Password
+                    </div>
                     </div>
                 </div>
                 <div class="row mt-5">

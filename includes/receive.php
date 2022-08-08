@@ -29,6 +29,14 @@
         case "order":
             setOrder($prodInfo["amount"],$prodInfo["list"]);
             break;
+
+        case "orderList":
+            getOrders($prodInfo["id"]);
+            break;
+
+        case "orderConfirmation":
+            confirmOrder($prodInfo["choice"], $prodInfo["id"]);
+            break;
         
         default:
             break;
@@ -134,4 +142,54 @@
     function setOrder($amount, $list) {
         $_SESSION["cartInfo"] = $list;
         $_SESSION["GRANDTOTAL"] = $amount;
+    }
+
+    function getOrders($id) {
+        require ("db.php");
+
+        $sql = "SELECT o.order_product_quantity, p.product_name FROM order_items AS o LEFT JOIN products AS p ON o.order_product_id=p.product_id WHERE order_id=?";
+        $result = prepareSQL($conn, $sql, "i", $id);
+
+        $list = "";
+
+        while($row = mysqli_fetch_array($result)) {
+            $listItem = $row["order_product_quantity"]." x ".$row["product_name"]."<br>";
+            $list = $list . $listItem;
+        }
+
+        $response = array(
+            "orders" => $list
+        );
+
+        header("Content-type: application/json");
+        echo json_encode($response);
+    }
+
+    function confirmOrder($choice, $id) {
+        require ("db.php");
+
+        if($choice == "accept") {
+            $choice = 2;
+
+            $sql = "UPDATE orders SET order_handler_employee_id=?, order_status_id=? WHERE order_id=?";
+            prepareSQL($conn, $sql, "iii", $_SESSION["eid"], $choice, $id);
+
+            $sql = "SELECT order_product_id, order_product_quantity FROM order_items WHERE order_id=?";
+            $result = prepareSQL($conn, $sql, "i", $id);
+
+            while($row = mysqli_fetch_array($result)) {
+                $sql = "SELECT inventory_product_count FROM inventory WHERE inventory_product_id=?";
+                $result1 = prepareSQL($conn, $sql, "i", $row["order_product_id"]);
+                $remaining = mysqli_fetch_array($result1);
+                $updatedCount = $remaining["inventory_product_count"] - $row["order_product_quantity"];
+
+                $sql = "UPDATE inventory SET inventory_product_count=?, inventory_timestamp=? WHERE inventory_product_id=?";
+                prepareSQL($conn, $sql, "isi", $updatedCount, date('Y-m-d H:i:s', time()), $row["order_product_id"]);
+            }
+        } else {
+            $choice = 3;
+
+            $sql = "UPDATE orders SET order_handler_employee_id=?, order_status_id=? WHERE order_id=?";
+            prepareSQL($conn, $sql, "iii", $_SESSION["eid"], $choice, $id);
+        }
     }

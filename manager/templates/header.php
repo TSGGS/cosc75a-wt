@@ -35,7 +35,7 @@
                             ';
                         } elseif($_SESSION["tid"] == 2) {
                             echo '
-                            <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">View Orders</a></li>
+                            <li class="nav-item"><a class="nav-link active" aria-current="page" href="./orders.php">View Orders</a></li>
                             <li class="nav-item"><a class="nav-link active" aria-current="page" href="./inventory.php">Update Inventory</a></li>
                             ';
                         } elseif($_SESSION["tid"] == 3) {
@@ -65,7 +65,7 @@
                                         </ul>
                                     </li>
                                  </ul>
-                                <li class="nav-item"><a class="nav-link active" aria-current="page" href="Resetpassword.php">Reset Password</a></li>
+                                <li class="nav-item"><a class="nav-link active" aria-current="page" href="resetpassword.php">Reset Password</a></li>
                             ';
                         } else {
                             header("Location: ../login.php");

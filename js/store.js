@@ -34,11 +34,14 @@ function addtoCart(prod) {
 let list = {};
 let GrandTotal = 0;
 let discount = 0;
-function updateQty(code, price) {
+function updateQty(code, price, max) {
     let qty = document.getElementById(code+"-qty");
     let display = document.getElementById(code+"-total");
 
     if(qty.value === "") {
+        qty.innerText = 1;
+        qty.value = 1;
+    } else if(qty.value > max) {
         qty.innerText = 1;
         qty.value = 1;
     }

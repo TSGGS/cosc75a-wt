@@ -50,7 +50,7 @@
                                 <span class="cart-name">'.$item["product_name"].'</span>
                             </div>
                             <div class="col-1">
-                                <input type="number" class="form-control" id="'.$item["product_code"].'-qty" name="" onclick="updateQty(\''.$item["product_code"].'\','.$item["price_amount"].')" onblur="updateQty(\''.$item["product_code"].'\','.$item["price_amount"].')" min="1" max="'.$item["inventory_product_count"].'" value="1">
+                                <input type="number" class="form-control" id="'.$item["product_code"].'-qty" name="" onclick="updateQty(\''.$item["product_code"].'\','.$item["price_amount"].')" onblur="updateQty(\''.$item["product_code"].'\','.$item["price_amount"].','.$item["inventory_product_count"].')" min="1" max="'.$item["inventory_product_count"].'" value="1">
                             </div>
                             <div class="col-1 text-center">
                                 <span class="cart-name">₱ '.$item["price_amount"].'

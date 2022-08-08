@@ -39,11 +39,7 @@
         foreach($products as $product) {
             $p = $_POST[$product];
             $id = $_POST["hidden-".$product];
-            echo '
-                <script>
-                    alert("'.date('Y-m-d H:i:s', time()).'");
-                </script>
-            ';
+
             $sql = "UPDATE inventory SET inventory_product_count=?, inventory_timestamp=? WHERE inventory_id=?";
             prepareSQL($conn, $sql, "isi", $p, date('Y-m-d H:i:s', time()), $id);
         }
