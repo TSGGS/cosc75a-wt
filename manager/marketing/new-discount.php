@@ -75,11 +75,13 @@
         $dEnd = date("Y-m-d H:i:s", strtotime($_POST["new-discount-end"]));
 
         $emptyCode = isEmpty($dCode, "new-discount-code");
+        $emptyAmount = isEmpty($dAmount, "new-discount-amount");
 
         $errorDate = validateDateRange($dStart, $dEnd);
 
   
         $error1 = false;
+        $error2 = false;
 
         $sql = "SELECT discount_code FROM discounts WHERE discount_code=?";
         $result = prepareSQL($conn, $sql, "s", $dCode);
@@ -98,6 +100,22 @@
                 </script>
             ';
             $error1 = false;
+        }
+
+        if($dAmount < 1 || $dAmount > 99) {
+            echo '
+                <script>
+                    toggleError("new-discount-amount-error", "show");
+                </script>
+            ';
+            $error2 = true;
+        } else {
+            echo '
+                <script>
+                    toggleError("new-discount-amount-error", "hide");
+                </script>
+            ';
+            $error2 = false;
         }
 
         if($errorDate === -1) {
@@ -151,7 +169,7 @@
                 $errorDate = 1;
             }
 
-            if(!$emptyCode && !$error1 && $errorDate == 1) {
+            if(!$emptyCode && !$emptyAmount && !$error1 && !$error2 && $errorDate == 1) {
                 $sql = "INSERT INTO discounts VALUES (NULL, ?, ?, ?, ?)";
                 prepareSQL($conn, $sql, "siss", $dCode, $dAmount, $dStart, $dEnd);
 
