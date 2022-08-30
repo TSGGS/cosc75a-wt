@@ -2,7 +2,7 @@
     require("../../includes/helper.php");
     require("../../includes/db.php");
 
-    changeTitle("../templates/header.php", "Update Promotion");
+    changeTitle("../templates/header.php", "Update Discount");
     validateUserPage($_SESSION["tid"], $_SERVER["REQUEST_URI"]);
 ?>
     <div class="container mt-3">
@@ -13,11 +13,11 @@
                     <input class="form-control"type="text" name="update-search" id="update-search" list="promotion-list" placeholder="Search Discount Code" autocfocus>
                     <datalist id="promotion-list">
                         <?php
-                            $sql = "SELECT promotion_code FROM promotions WHERE promotion_start_timestamp > current_timestamp() AND promotion_end_timestamp > current_timestamp() OR promotion_start_timestamp < current_timestamp() AND promotion_end_timestamp > current_timestamp()";
+                            $sql = "SELECT discount_code, discount_amount FROM discounts";
                             $result = prepareSQL($conn, $sql);
                             while($resultRow = mysqli_fetch_array($result)) {
                                 echo '
-                                    <option value="'.$resultRow["promotion_code"].'"></option>
+                                    <option value="'.$resultRow["discount_code"].'">'.$resultRow["discount_amount"].'% Discount</option>
                                 ';
                             }
                         ?>
@@ -82,7 +82,7 @@
                 </div>
                 <div class="col-9 col-input">
                     <div class="row">
-                        <input type="datetime-local" class="form-control" name="update-discount-end" id="update-disount-end" required>
+                        <input type="datetime-local" class="form-control" name="update-discount-end" id="update-discount-end" required>
                     </div>
                     <div class="row mb-2 d-none error" id="update-discount-end-error">
                         Invalid Discount End
@@ -97,7 +97,7 @@
         </form>
     </div>
 <?php
-    if(isset($_GET["search-promotion"])) {
+    if(isset($_GET["search-discount"])) {
         if(!empty($_GET["update-search"])) {
             echo '
                 <script>
@@ -107,6 +107,7 @@
 
             $sql = "SELECT * FROM discounts WHERE discount_code=?";
             $result = prepareSQL($conn, $sql, "s", $_GET["update-search"]);
+            
             if(mysqli_num_rows($result) != 1) {
                 echo '
                     <script>
@@ -122,16 +123,16 @@
 
                 $resultRow = mysqli_fetch_array($result);
                 $discount_code = json_encode($resultRow["discount_code"]);
-                $discount_image = json_encode($resultRow["discount_image"]);
+                $discount_amount = json_encode($resultRow["discount_amount"]);
                 $discount_start = json_encode(date("Y-m-d\TH:i", strtotime($resultRow["discount_start_timestamp"])));
                 $discount_end = json_encode(date("Y-m-d\TH:i", strtotime($resultRow["discount_end_timestamp"])));
 
                 $_SESSION["discount_start"] = date("Y-m-d H:i:s", strtotime($resultRow["discount_start_timestamp"]));
-                $_SESSION["discount_amount"] = $resultRow["promotion_amount"];
+                $_SESSION["discount_amount"] = $resultRow["discount_amount"];
 
                 echo '
                     <script>
-                        displayUpdatePromotion('.$promotion_code.', '.$promotion_image.', '.$promotion_start.', '.$promotion_end.');
+                        displayUpdateDiscount('.$discount_code.', '.$discount_amount.', '.$discount_start.', '.$discount_end.');
                     </script>
                 ';
             }
@@ -140,61 +141,54 @@
     }
     
     if(isset($_POST["update-discount"])){
-        $prCode = strtoupper($_POST["update-discount-code"]);
-        $prStart = date("Y-m-d H:i:s", strtotime($_POST["update-discount-start"]));
-        $prEnd = date("Y-m-d H:i:s", strtotime($_POST["update-discount-end"]));
+        // REDO
+        $dCode = $_POST["update-discount-code"];
+        $dAmount =  $_POST["update-discount-amount"];
+        $dStart = date("Y-m-d H:i:s", strtotime($_POST["update-discount-start"]));
+        $dEnd = date("Y-m-d H:i:s", strtotime($_POST["update-discount-end"]));
 
-        $emptyCode = isEmpty($prCode, "update-discount-code");
-        $emptyStart = isEmpty($prStart, "update-discount-start");
-        $emptyEnd = isEmpty($prEnd, "update-discount-end");
+        $emptyCode = isEmpty($dCode, "update-discount-code");
+        $emptyAmount = isEmpty($dAmount, "update-discount-amount");
 
-        $emptyImage = (isset($_FILES["update-promotion-image"]["size"])) && ($_FILES["update-promotion-image"]["size"] > 0);
-        if($emptyImage) {
-            $img = $_FILES["update-promotion-image"]["name"];
-            $imgTmp = $_FILES["update-promotion-image"]["tmp_name"];
-            $imgExt = pathinfo($img, PATHINFO_EXTENSION);
-        }
+        $errorDate = validateDateRange($dStart, $dEnd);
 
-        $errorDate = validateDateRange($prStart, $prEnd, "update");
-        $errorImage = false;
+  
+        $error1 = false;
+        $error2 = false;
 
-        $sql = "SELECT * FROM promotions WHERE promotion_code=?";
-        $result = prepareSQL($conn, $sql, "s", $prCode);
-        $resultRow = mysqli_num_rows($result);
-        if($resultRow != 1) {
+        $sql = "SELECT discount_code FROM discounts WHERE discount_code=?";
+        $result = prepareSQL($conn, $sql, "s", $dCode);
+        $row = mysqli_num_rows($result);
+        if($row != 1) {
             echo '
                 <script>
-                    toggleError("update-promotion-code-error", "show");
+                    toggleError("update-discount-code-error", "show");
                 </script>
             ';
-            $errorCode = true;
+            $error1 = true;
         } else {
             echo '
                 <script>
                     toggleError("update-discount-code-error", "hide");
                 </script>
             ';
-            $errorCode = false;
+            $error1 = false;
         }
 
-        if($emptyImage) {
-            if(!isImage($imgExt)) {
-                echo '
-                    <script>
-                        toggleError("update-promotion-image-error", "show");
-                    </script>
-                ';
-
-                $errorImage = true;
-            } else {
-                echo '
-                    <script>
-                        toggleError("update-promotion-image-error", "hide");
-                    </script>
-                ';
-
-                $errorImage = false;
-            }
+        if($dAmount < 1 || $dAmount > 99) {
+            echo '
+                <script>
+                    toggleError("update-discount-amount-error", "show");
+                </script>
+            ';
+            $error2 = true;
+        } else {
+            echo '
+                <script>
+                    toggleError("update-discount-code-error", "hide");
+                </script>
+            ';
+            $error2 = false;
         }
 
         if($errorDate === -1) {
@@ -224,8 +218,8 @@
                 </script>
             ';
 
-            $sql = "SELECT IF(EXISTS(SELECT promotion_id FROM promotions WHERE promotion_code != ? AND promotion_end_timestamp >= ? AND promotion_start_timestamp <= ?), true, false) AS result";
-            $result = prepareSQL($conn, $sql, "sss", $prCode, $prStart, $prEnd);
+            $sql = "SELECT IF(EXISTS(SELECT discount_id FROM discounts WHERE discount_end_timestamp >= ? AND discount_start_timestamp <= ?), true, false) AS result";
+            $result = prepareSQL($conn, $sql, "ss", $dStart, $dEnd);
             $resultRow = mysqli_fetch_array($result);
             if($resultRow["result"]) {
                 echo '
@@ -243,58 +237,37 @@
                         toggleError("update-discount-end-error", "hide");
                     </script>
                 ';
+
                 $errorDate = 1;
+            }
 
-                if($prStart != $_SESSION["discount_start"]) {
-                    echo '
-                        <script>
-                            toggleError("update-discount-start-error", "show");
-                        </script>
-                    ';
-                    $errorDate = -4;
-                } else {
-                    echo '
-                        <script>
-                            toggleError("update-discount-start-error", "hide");
-                        </script>
-                    ';
-                    $errorDate = 1;
-                }
+            if(!$emptyCode && !$emptyAmount && !$error1 && !$error2 && $errorDate == 1) {
+                $sql = "INSERT INTO discounts VALUES (NULL, ?, ?, ?, ?)";
+                prepareSQL($conn, $sql, "siss", $dCode, $dAmount, $dStart, $dEnd);
+
+                echo '
+                    <script>
+                        window.location.replace("dashboard.php");
+                    </script>
+                ';
+            } else {
+                echo '
+                    <script>
+                        document.getElementById("new-discount-code").value = "'.$dCode.'";
+                        document.getElementById("new-discount-amount").value = "'.$dAmount.'";
+                        document.getElementById("new-discount-start").value = "'.$dStart.'";
+                        document.getElementById("new-discount-end").value = "'.$dEnd.'";
+                    </script>
+                ';
             }
         }
 
-        if(!$emptyCode && !$emptyStart && !$emptyEnd && !$errorCode && !$errorImage && $errorDate == 1) {
-            $sql = "SELECT promotion_id FROM promotions WHERE promotion_code=?";
-            $result = prepareSQL($conn, $sql, "s", $prCode);
-            $resultRow = mysqli_fetch_array($result);
-
-            if(!$emptyImage) {
-                $rename = date('YmdHis').'_'.uniqid().'.'.$imgExt;
-
-                move_uploaded_file($imgTmp, "../../images/promotions/$rename");
-
-                $sql = "UPDATE promotions SET promotion_image=? WHERE promotion_id=?";
-                prepareSQL($conn, $sql, "si", $rename, $resultRow["promotion_id"]);
-            }
-
-            $sql = "UPDATE promotions SET promotion_code=?, promotion_start_timestamp=?, promotion_end_timestamp=? WHERE promotion_id=?";
-            prepareSQL($conn, $sql, "sssi", $prCode, $prStart, $prEnd, $resultRow["promotion_id"]);
-
-            echo '
-                <script>
-                    window.location.replace("dashboard.php");
-                </script>
-            ';
-        } else {
-            echo '
-                <script>
-                    document.getElementById("update-discount-code").value = '.json_encode($prCode).';
-                    document.getElementById("update-discount-start").value = '.json_encode($_POST["update-discount-start"]).';
-                    document.getElementById("update-promotion-end").value = '.json_encode($_POST["update-discount-end"]).';
-
-                    document.getElementById("update-discount-image-display").src = "../../images/promotions/'.$_SESSION["discount_image"].'";
-                    document.getElementById("update-discount-image-display-div").classList.remove("d-none");
-                </script>
-            ';
-        }
+        echo '
+            <script>
+                document.getElementById("new-discount-code").value = "'.$dCode.'";
+                document.getElementById("new-discount-amount").value = "'.$dAmount.'";
+                document.getElementById("new-discount-start").value = "'.$dStart.'";
+                document.getElementById("new-discount-end").value = "'.$dEnd.'";
+            </script>
+        ';
     }
