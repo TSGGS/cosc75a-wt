@@ -27,7 +27,7 @@
                     array_push($products, $row["product_code"]);
                 }
             ?>
-            <div class="row mt-5">
+            <div class="row my-5">
                 <div class="col inline-right">
                     <button type="submit" class="btn btn-light" name="update-inventory"><strong>Update Inventory</strong></button>
                 </div>
@@ -43,4 +43,10 @@
             $sql = "UPDATE inventory SET inventory_product_count=?, inventory_timestamp=? WHERE inventory_id=?";
             prepareSQL($conn, $sql, "isi", $p, date('Y-m-d H:i:s', time()), $id);
         }
+
+        echo '
+                <script>
+                    window.location.replace("dashboard.php");
+                </script>
+            ';
     }

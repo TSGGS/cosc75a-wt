@@ -31,7 +31,7 @@
                                 </ul>
                             </li>
 
-                            <li class="nav-item"><a class="nav-link active" aria-current="page" href="./report.php">Generate Report</a></li>
+                            <li class="nav-item"><a class="nav-link active" aria-current="page" href="./report.php">View Report</a></li>
                             ';
                         } elseif($_SESSION["tid"] == 2) {
                             echo '
@@ -50,7 +50,7 @@
                             <li class="nav-item dropdown"><a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Discount</a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" aria-current="page" href="./new-discount.php">New Discount</a></li>
-                                    <li><a class="dropdown-item" aria-current="page" href="#">Update Discount</a></li>
+                                    <li><a class="dropdown-item" aria-current="page" href="./update-discount.php">Update Discount</a></li>
 
                                 </ul>
                             </li>

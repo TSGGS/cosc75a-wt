@@ -32,6 +32,18 @@ function displayUpdatePromotion(promotion_code, promotion_image, promotion_start
 
 }
 
+function displayUpdateDiscount(discount_code, discount_amount, discount_start, discount_end) {
+    let dCode = document.getElementById("update-discount-code");
+    let dAmount = document.getElementById("update-discount-amount");
+    let dStart = document.getElementById("update-discount-start");
+    let dEnd = document.getElementById("update-discount-end");
+
+    dCode.value = discount_code;
+    dAmount.value = discount_amount;
+    dStart.value = discount_start;
+    dEnd.value = discount_end;
+}
+
 function toggleError(element_id, action) {
     if(action === "show") {
         document.getElementById(element_id).classList.remove("d-none");

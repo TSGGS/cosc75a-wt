@@ -4,9 +4,6 @@
     echo '
         <title>Walang Tatak</title>
         <script src="js/store.js"></script>
-        <script>
-            document.body.style.overflow = "hidden";
-        </script>
     ';
 ?>
 
@@ -34,6 +31,7 @@
             $promotion = mysqli_fetch_array($result);
 
             echo '
+                <script>document.body.style.overflow = "hidden";</script>
                 <div class="my-modal" id="modal" onclick="destroyPromotion();"></div>
                 <img src="./images/promotions/'.$promotion["promotion_image"].'" id="promotion" onclick="destroyPromotion();">
             ';
