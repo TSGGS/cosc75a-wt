@@ -6,7 +6,7 @@
     validateUserPage($_SESSION["tid"], $_SERVER["REQUEST_URI"]);
 ?>
     <div class="container mt-3">
-    <h1>Change Password</h1>
+    <h1>Reset Password</h1>
         <table class="table table-sm table-hover mt-4">
             <thead>
                 <tr>
@@ -87,15 +87,14 @@
                 prepareSQL($conn, $sql, "si", $resultRowApprove["password_reset_password"], $resultRowApprove["password_reset_employee_id"]);
             } else {
                 $sql = "UPDATE password_reset SET password_reset_handler=? WHERE password_reset_id=?;";
-                $test = prepareSQL($conn, $sql, "ii", $_SESSION["eid"], $resultRowApprove["password_reset_id"]);
-                var_dump(mysqli_errno($conn));;
+                prepareSQL($conn, $sql, "ii", $_SESSION["eid"], $resultRowApprove["password_reset_id"]);
             }
 
-            // echo '
-            //     <script>
-            //         window.location.reload;
-            //     </script>
-            // ';
+            echo '
+                <script>
+                    window.location.reload;
+                </script>
+            ';
         }
     }
     
