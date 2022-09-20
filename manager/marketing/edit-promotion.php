@@ -244,22 +244,6 @@
                     </script>
                 ';
                 $errorDate = 1;
-
-                // if($prStart != $_SESSION["promotion_start"]) {
-                //     echo '
-                //         <script>
-                //             toggleError("update-promotion-start-error", "show");
-                //         </script>
-                //     ';
-                //     $errorDate = -4;
-                // } else {
-                //     echo '
-                //         <script>
-                //             toggleError("update-promotion-start-error", "hide");
-                //         </script>
-                //     ';
-                //     $errorDate = 1;
-                // }
             }
         }
 
