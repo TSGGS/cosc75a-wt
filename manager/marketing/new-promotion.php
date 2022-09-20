@@ -40,7 +40,7 @@
                 </div>
                 <div class="col-9 col-input">
                     <div class="row">
-                        <input type="datetime-local" class="form-control" name="new-promotion-start" id="new-promotion-start" required>
+                        <input type="datetime-local" class="form-control" name="new-promotion-start" id="new-promotion-start" min="<?= date("Y-m-d\TH:i") ?>" max="<?= date("Y-m-d\TH:i", strtotime("+60 days")) ?>" required>
                     </div>
                     <div class="row mb-2 d-none error" id="new-promotion-start-error">
                         Invalid Promotion Start
@@ -53,7 +53,7 @@
                 </div>
                 <div class="col-9 col-input">
                     <div class="row">
-                        <input type="datetime-local" class="form-control" name="new-promotion-end" id="new-promotion-end" required>
+                        <input type="datetime-local" class="form-control" name="new-promotion-end" id="new-promotion-end" min="<?= date("Y-m-d\TH:i") ?>" max="<?= date("Y-m-d\TH:i", strtotime("+60 days")) ?>" required>
                     </div>
                     <div class="row mb-2 d-none error" id="new-promotion-end-error">
                         Invalid Promotion End
@@ -72,8 +72,8 @@
 
     if(isset($_POST["new-promotion"])) {
         $prCode = strtoupper($_POST["new-promotion-code"]);
-        $prStart = date("Y-m-d H:i:s", strtotime($_POST["new-promotion-start"]));
-        $prEnd = date("Y-m-d H:i:s", strtotime($_POST["new-promotion-end"]));
+        $prStart = strtotime($_POST["new-promotion-start"]);
+        $prEnd = strtotime($_POST["new-promotion-end"]);
 
         $img = $_FILES["new-promotion-image"]["name"];
         $imgTmp = $_FILES["new-promotion-image"]["tmp_name"];
@@ -177,7 +177,7 @@
             move_uploaded_file($imgTmp, "../../images/promotions/$rename");
 
             $sql = "INSERT INTO promotions VALUES (NULL, ?, ?, ?, ?)";
-            prepareSQL($conn, $sql, "ssss", $prCode, $rename, $prStart, $prEnd);
+            prepareSQL($conn, $sql, "ssss", $prCode, $rename, date("Y-m-d H:i:s",$prStart), date("Y-m-d H:i:s",$prEnd));
 
             echo '
                 <script>
@@ -188,8 +188,8 @@
             echo '
                 <script>
                     document.getElementById("new-promotion-code").value = '.json_encode($prCode).';
-                    document.getElementById("new-promotion-start").value = '.json_encode($_POST["new-promotion-start"]).';
-                    document.getElementById("new-promotion-end").value = '.json_encode($_POST["new-promotion-end"]).';
+                    document.getElementById("new-promotion-start").value = '.json_encode(date('Y-m-d H:i', $prStart)).';
+                    document.getElementById("new-promotion-end").value = '.json_encode(date('Y-m-d H:i', $prEnd)).';
                 </script>
             ';
         }

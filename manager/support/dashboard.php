@@ -10,6 +10,7 @@
         <table class="table table-sm table-hover mt-4">
             <thead>
                 <tr>
+                    <th class="inline-center">ID No</th>
                     <th class="inline-center">First Name</th>
                     <th class="inline-center">Last Name</th>
                     <th class="inline-center">Team</th>
@@ -23,6 +24,7 @@
                     while($resultRow = mysqli_fetch_array($result)) {
                         echo '
                             <tr>
+                                <td class="inline-center">'.$resultRow["employee_id"].'</td>
                                 <td class="inline-center">'.$resultRow["employee_firstname"].'</td>
                                 <td class="inline-center">'.$resultRow["employee_lastname"].'</td>
                                 <td class="inline-center">'.$resultRow["team_name"].'</td>

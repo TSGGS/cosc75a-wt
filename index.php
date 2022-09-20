@@ -24,7 +24,7 @@
         <span class="type-name" style="top: 0; left: 72%; padding-top: 1px; padding-right: 35px;">CAKES</span>
     </div>
     <?php
-        $sql = "SELECT promotion_image FROM `promotions` WHERE promotion_end_timestamp >= CURDATE();";
+        $sql = "SELECT promotion_image FROM promotions WHERE current_timestamp() BETWEEN promotion_start_timestamp AND promotion_end_timestamp;";
         $result = prepareSQL($conn, $sql);
 
         if(mysqli_num_rows($result) > 0) {

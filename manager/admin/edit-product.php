@@ -13,7 +13,7 @@
                     <input class="form-control" type="text" name="update-search" id="update-search" list="product-list" placeholder="Search Product" autocfocus>
                     <datalist id="product-list">
                         <?php
-                            $sql = "SELECT p.product_code AS product_code, p.product_name AS product_name FROM products AS p WHERE product_end_timestamp IS NULL AND p.product_type != 4";
+                            $sql = "SELECT p.product_code AS product_code, p.product_name AS product_name FROM products AS p WHERE product_end_timestamp IS NULL";
                             $result = prepareSQL($conn, $sql);
                             while($resultRow = mysqli_fetch_array($result)) {
                                 echo '

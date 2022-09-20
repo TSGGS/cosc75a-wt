@@ -4,7 +4,7 @@ function destroyPromotion() {
 
     promotion.parentNode.removeChild(promotion);
     modal.parentNode.removeChild(modal);
-    document.body.style.overflow = "scroll";
+    document.body.style.overflowY = "scroll";
 }
 
 function addtoCart(prod) {
@@ -164,7 +164,7 @@ function applyDiscount() {
     if(code != "") {
         let product = {
             "type": "discount",
-            "code": code
+            "code": code.toUpperCase()
         };
     
         let xhr = new XMLHttpRequest();

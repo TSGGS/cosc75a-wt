@@ -66,30 +66,14 @@
         }
     }
 
-    function validateDate($date, $format = "Y-m-d H:i:s") {
-        $d = DateTime::createFromFormat($format, $date);
-
-        return $d && $d->format($format) === $date;
-    }
-
     function validateDateRange($start, $end,  $type = "new") {
         $today = strtotime(date("Y-m-d H:i:s"));
-        $timeStart = strtotime($start);
-        $timeEnd = strtotime($end);
-
-        if(!validateDate($end)) {
-            return -2;
-        }
 
         if($type == "new") {
-            if(!validateDate($start)) {
-                return -1;
-            }
-    
-            if($timeStart < $today || $timeEnd < $today || $timeEnd < $timeStart) {
-                if($timeEnd < $timeStart || $timeStart < $today) {
+            if($start < $today || $end < $today || $end < $start) {
+                if($end < $start || $start < $today) {
                     return -3;
-                } elseif($timeEnd < $today || $timeEnd < $timeStart) {
+                } elseif($end < $today || $end < $start) {
                     return -2;
                 } else {
                     return -1;
@@ -98,7 +82,7 @@
                 return 1;
             }
         } else {
-            if($timeEnd < $timeStart) {
+            if($end <= $start) {
                 return -2;
             } else {
                 return 1;

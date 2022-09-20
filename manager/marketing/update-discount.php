@@ -51,7 +51,7 @@
                 </div>
                 <div class="col-9 col-input">
                     <div class="row">
-                        <input type="text" class="form-control" name="update-discount-amount" id="update-discount-amount">
+                        <input type="number" class="form-control" name="update-discount-amount" id="update-discount-amount" min="1" max="99">
                     </div>
                     <div class="row mb-2 d-none error" id="update-discount-amount-error">
                         Invalid Amount
@@ -69,7 +69,7 @@
                 </div>
                 <div class="col-9 col-input">
                     <div class="row">
-                        <input type="datetime-local" class="form-control" name="update-discount-start" id="update-discount-start" required>
+                        <input type="datetime-local" class="form-control" name="update-discount-start" id="update-discount-start" min="<?= date("Y-m-d\TH:i") ?>" max="<?= date("Y-m-d\TH:i", strtotime("+60 days")) ?>" required>
                     </div>
                     <div class="row mb-2 d-none error" id="update-discount-start-error">
                         Invalid Discount Start
@@ -82,7 +82,7 @@
                 </div>
                 <div class="col-9 col-input">
                     <div class="row">
-                        <input type="datetime-local" class="form-control" name="update-discount-end" id="update-discount-end" required>
+                        <input type="datetime-local" class="form-control" name="update-discount-end" id="update-discount-end" min="<?= date("Y-m-d\TH:i") ?>" max="<?= date("Y-m-d\TH:i", strtotime("+60 days")) ?>" required>
                     </div>
                     <div class="row mb-2 d-none error" id="update-discount-end-error">
                         Invalid Discount End
@@ -141,11 +141,10 @@
     }
     
     if(isset($_POST["update-discount"])){
-        // REDO
         $dCode = $_POST["update-discount-code"];
         $dAmount =  $_POST["update-discount-amount"];
-        $dStart = date("Y-m-d H:i:s", strtotime($_POST["update-discount-start"]));
-        $dEnd = date("Y-m-d H:i:s", strtotime($_POST["update-discount-end"]));
+        $dStart = strtotime($_POST["update-discount-start"]);
+        $dEnd = strtotime($_POST["update-discount-end"]);
 
         $emptyCode = isEmpty($dCode, "update-discount-code");
         $emptyAmount = isEmpty($dAmount, "update-discount-amount");
@@ -159,7 +158,7 @@
         $sql = "SELECT discount_code FROM discounts WHERE discount_code=?";
         $result = prepareSQL($conn, $sql, "s", $dCode);
         $row = mysqli_num_rows($result);
-        if($row != 1) {
+        if($row !== 1) {
             echo '
                 <script>
                     toggleError("update-discount-code-error", "show");
@@ -185,7 +184,7 @@
         } else {
             echo '
                 <script>
-                    toggleError("update-discount-code-error", "hide");
+                    toggleError("update-discount-amount-error", "hide");
                 </script>
             ';
             $error2 = false;
@@ -219,7 +218,7 @@
             ';
 
             $sql = "SELECT IF(EXISTS(SELECT discount_id FROM discounts WHERE discount_end_timestamp >= ? AND discount_start_timestamp <= ?), true, false) AS result";
-            $result = prepareSQL($conn, $sql, "ss", $dStart, $dEnd);
+            $result = prepareSQL($conn, $sql, "ss", date("Y-m-d H:i:s",$dStart), date("Y-m-d H:i:s", $dEnd));
             $resultRow = mysqli_fetch_array($result);
             if($resultRow["result"]) {
                 echo '
@@ -242,8 +241,8 @@
             }
 
             if(!$emptyCode && !$emptyAmount && !$error1 && !$error2 && $errorDate == 1) {
-                $sql = "INSERT INTO discounts VALUES (NULL, ?, ?, ?, ?)";
-                prepareSQL($conn, $sql, "siss", $dCode, $dAmount, $dStart, $dEnd);
+                $sql = "UPDATE discounts SET discount_amount=?, discount_start_timestamp=?, discount_end_timestamp=? WHERE discount_id=?";
+                prepareSQL($conn, $sql, "issi", $dAmount, date("Y-m-d H:i:s",$dStart), date("Y-m-d H:i:s", $dEnd), $dCode);
 
                 echo '
                     <script>
@@ -253,10 +252,10 @@
             } else {
                 echo '
                     <script>
-                        document.getElementById("new-discount-code").value = "'.$dCode.'";
-                        document.getElementById("new-discount-amount").value = "'.$dAmount.'";
-                        document.getElementById("new-discount-start").value = "'.$dStart.'";
-                        document.getElementById("new-discount-end").value = "'.$dEnd.'";
+                        document.getElementById("update-discount-code").value = "'.$dCode.'";
+                        document.getElementById("update-discount-amount").value = "'.$dAmount.'";
+                        document.getElementById("update-discount-start").value = "'.date("Y-m-d H:i", $dStart).'";
+                        document.getElementById("update-discount-end").value = "'.date("Y-m-d H:i", $dEnd).'";
                     </script>
                 ';
             }
@@ -264,10 +263,10 @@
 
         echo '
             <script>
-                document.getElementById("new-discount-code").value = "'.$dCode.'";
-                document.getElementById("new-discount-amount").value = "'.$dAmount.'";
-                document.getElementById("new-discount-start").value = "'.$dStart.'";
-                document.getElementById("new-discount-end").value = "'.$dEnd.'";
+                document.getElementById("update-discount-code").value = "'.$dCode.'";
+                document.getElementById("update-discount-amount").value = "'.$dAmount.'";
+                document.getElementById("update-discount-start").value = "'.date("Y-m-d H:i", $dStart).'";
+                document.getElementById("update-discount-end").value = "'.date("Y-m-d H:i", $dEnd).'";
             </script>
         ';
     }

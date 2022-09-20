@@ -13,7 +13,7 @@
                     <input class="form-control"type="text" name="update-search" id="update-search" list="promotion-list" placeholder="Search Promotion Code" autocfocus>
                     <datalist id="promotion-list">
                         <?php
-                            $sql = "SELECT promotion_code FROM promotions WHERE promotion_start_timestamp > current_timestamp() AND promotion_end_timestamp > current_timestamp() OR promotion_start_timestamp < current_timestamp() AND promotion_end_timestamp > current_timestamp()";
+                            $sql = "SELECT promotion_code FROM promotions";
                             $result = prepareSQL($conn, $sql);
                             while($resultRow = mysqli_fetch_array($result)) {
                                 echo '
@@ -141,14 +141,14 @@
     
     if(isset($_POST["update-promotion"])){
         $prCode = strtoupper($_POST["update-promotion-code"]);
-        $prStart = date("Y-m-d H:i:s", strtotime($_POST["update-promotion-start"]));
-        $prEnd = date("Y-m-d H:i:s", strtotime($_POST["update-promotion-end"]));
+        $prStart = strtotime($_POST["update-promotion-start"]);
+        $prEnd = strtotime($_POST["update-promotion-end"]);
 
         $emptyCode = isEmpty($prCode, "update-promotion-code");
         $emptyStart = isEmpty($prStart, "update-promotion-start");
         $emptyEnd = isEmpty($prEnd, "update-promotion-end");
 
-        $emptyImage = (!isset($_FILES["update-promotion-image"]["size"])) && ($_FILES["update-promotion-image"]["size"] > 0);
+        $emptyImage = !(isset($_FILES["update-promotion-image"]["size"]) && $_FILES["update-promotion-image"]["size"] > 0);
         if(!$emptyImage) {
             $img = $_FILES["update-promotion-image"]["name"];
             $imgTmp = $_FILES["update-promotion-image"]["tmp_name"];
@@ -177,7 +177,7 @@
             $errorCode = false;
         }
 
-        if($emptyImage) {
+        if(!$emptyImage) {
             if(!isImage($imgExt)) {
                 echo '
                     <script>
@@ -245,21 +245,21 @@
                 ';
                 $errorDate = 1;
 
-                if($prStart != $_SESSION["promotion_start"]) {
-                    echo '
-                        <script>
-                            toggleError("update-promotion-start-error", "show");
-                        </script>
-                    ';
-                    $errorDate = -4;
-                } else {
-                    echo '
-                        <script>
-                            toggleError("update-promotion-start-error", "hide");
-                        </script>
-                    ';
-                    $errorDate = 1;
-                }
+                // if($prStart != $_SESSION["promotion_start"]) {
+                //     echo '
+                //         <script>
+                //             toggleError("update-promotion-start-error", "show");
+                //         </script>
+                //     ';
+                //     $errorDate = -4;
+                // } else {
+                //     echo '
+                //         <script>
+                //             toggleError("update-promotion-start-error", "hide");
+                //         </script>
+                //     ';
+                //     $errorDate = 1;
+                // }
             }
         }
 
@@ -278,19 +278,19 @@
             }
 
             $sql = "UPDATE promotions SET promotion_code=?, promotion_start_timestamp=?, promotion_end_timestamp=? WHERE promotion_id=?";
-            prepareSQL($conn, $sql, "sssi", $prCode, $prStart, $prEnd, $resultRow["promotion_id"]);
+            prepareSQL($conn, $sql, "sssi", $prCode, date("Y-m-d H:i:s",$prStart), date("Y-m-d H:i:s",$prEnd), $resultRow["promotion_id"]);
 
             echo '
                 <script>
-                    // window.location.replace("dashboard.php");
+                    window.location.replace("dashboard.php");
                 </script>
             ';
         } else {
             echo '
                 <script>
                     document.getElementById("update-promotion-code").value = '.json_encode($prCode).';
-                    document.getElementById("update-promotion-start").value = '.json_encode($_POST["update-promotion-start"]).';
-                    document.getElementById("update-promotion-end").value = '.json_encode($_POST["update-promotion-end"]).';
+                    document.getElementById("update-promotion-start").value = '.json_encode(date('Y-m-d H:i', $prStart)).';
+                    document.getElementById("update-promotion-end").value = '.json_encode(date('Y-m-d H:i', $prEnd)).';
 
                     document.getElementById("update-promotion-image-display").src = "../../images/promotions/'.$_SESSION["promotion_image"].'";
                     document.getElementById("update-promotion-image-display-div").classList.remove("d-none");

@@ -20,7 +20,7 @@
                     </thead>
                     <tbody>
                         <?php
-                            $sql = "SELECT promotion_code, promotion_start_timestamp, promotion_end_timestamp, promotion_image FROM promotions WHERE promotion_start_timestamp > current_timestamp() AND promotion_end_timestamp > current_timestamp() OR promotion_start_timestamp < current_timestamp() AND promotion_end_timestamp > current_timestamp()";
+                            $sql = "SELECT promotion_code, promotion_start_timestamp, promotion_end_timestamp, promotion_image FROM promotions WHERE current_timestamp() BETWEEN promotion_start_timestamp AND promotion_end_timestamp;";
                             $promotion = prepareSQL($conn, $sql);
                             
                             if(mysqli_num_rows($promotion) > 0) {

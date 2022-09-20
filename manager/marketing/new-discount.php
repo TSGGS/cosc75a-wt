@@ -26,7 +26,7 @@
             </div>
             <div class="row my-2">
                 <div class="col-3 col-title">
-                    <label class="col-form-label" for="new-discount-amount"><h4>Discount Amount</h4></label>
+                    <label class="col-form-label" for="new-discount-amount"><h4>Discount Percentage</h4></label>
                 </div>
                 <div class="col-9 col-input">
                     <div class="row">
@@ -40,7 +40,7 @@
                 </div>
                 <div class="col-9 col-input">
                     <div class="row">
-                        <input type="datetime-local" class="form-control" name="new-discount-start" id="new-discount-start" required>
+                        <input type="datetime-local" class="form-control" name="new-discount-start" id="new-discount-start" min="<?= date("Y-m-d\TH:i") ?>" max="<?= date("Y-m-d\TH:i", strtotime("+60 days")) ?>" required>
                     </div>
                     <div class="row mb-2 d-none error" id="new-discount-start-error">
                         Invalid Discount Start
@@ -53,7 +53,7 @@
                 </div>
                 <div class="col-9 col-input">
                     <div class="row">
-                        <input type="datetime-local" class="form-control" name="new-discount-end" id="new-discount-end" required>
+                        <input type="datetime-local" class="form-control" name="new-discount-end" id="new-discount-end" min="<?= date("Y-m-d\TH:i") ?>" max="<?= date("Y-m-d\TH:i", strtotime("+60 days")) ?>" required>
                     </div>
                     <div class="row mb-2 d-none error" id="new-discount-end-error">
                         Invalid Discount End
@@ -67,17 +67,21 @@
             </div>
         </form>
     </div>
+    <?php
+    ?>
 <?php
     if(isset($_POST["new-discount"])) {
-        $dCode = $_POST["new-discount-code"];
+        $dCode = strtoupper($_POST["new-discount-code"]);
         $dAmount =  $_POST["new-discount-amount"];
-        $dStart = date("Y-m-d H:i:s", strtotime($_POST["new-discount-start"]));
-        $dEnd = date("Y-m-d H:i:s", strtotime($_POST["new-discount-end"]));
+        $dStart = strtotime($_POST["new-discount-start"]);
+        $dEnd = strtotime($_POST["new-discount-end"]);
 
         $emptyCode = isEmpty($dCode, "new-discount-code");
         $emptyAmount = isEmpty($dAmount, "new-discount-amount");
 
         $errorDate = validateDateRange($dStart, $dEnd);
+
+        echo $errorDate;
 
   
         $error1 = false;
@@ -122,7 +126,6 @@
             echo '
                 <script>
                     toggleError("new-discount-start-error", "show");
-                    alert("HERE");
                 </script>
             ';
         } elseif($errorDate === -2) {
@@ -171,7 +174,7 @@
 
             if(!$emptyCode && !$emptyAmount && !$error1 && !$error2 && $errorDate == 1) {
                 $sql = "INSERT INTO discounts VALUES (NULL, ?, ?, ?, ?)";
-                prepareSQL($conn, $sql, "siss", $dCode, $dAmount, $dStart, $dEnd);
+                prepareSQL($conn, $sql, "siss", $dCode, $dAmount, date("Y-m-d H:i:s",$dStart), date("Y-m-d H:i:s", $dEnd));
 
                 echo '
                     <script>
@@ -183,8 +186,8 @@
                     <script>
                         document.getElementById("new-discount-code").value = "'.$dCode.'";
                         document.getElementById("new-discount-amount").value = "'.$dAmount.'";
-                        document.getElementById("new-discount-start").value = "'.$dStart.'";
-                        document.getElementById("new-discount-end").value = "'.$dEnd.'";
+                        document.getElementById("new-discount-start").value = "'.date("Y-m-d H:i", $dStart).'";
+                        document.getElementById("new-discount-end").value = "'.date("Y-m-d H:i", $dEnd).'";
                     </script>
                 ';
             }
@@ -194,8 +197,8 @@
             <script>
                 document.getElementById("new-discount-code").value = "'.$dCode.'";
                 document.getElementById("new-discount-amount").value = "'.$dAmount.'";
-                document.getElementById("new-discount-start").value = "'.$dStart.'";
-                document.getElementById("new-discount-end").value = "'.$dEnd.'";
+                document.getElementById("new-discount-start").value = "'.date('c', $dStart).'";
+                document.getElementById("new-discount-end").value = "'.date('c', $dEnd).'";
             </script>
         ';
     }
