@@ -35,6 +35,11 @@
                         <input type="password" class="form-control" name="reset-pass2" id="reset-pass2" required>
                     </div>
                 </div>
+                <div class="row m-2 mb-4">
+                    <div class="col inline-right">
+                        <a href="login.php" class="">Back to Login</a>
+                    </div>
+                </div>
 
                 <div class="row m-2">
                     <div class="col inline-center">
@@ -77,10 +82,11 @@
                         $sql = "INSERT INTO password_reset VALUES (NULL, ?, ?, NULL, NULL, 0)";
                         prepareSQL($conn, $sql, "is", $eid, $password);
     
-                        echo "
+                        echo '
                         <script>
-                            alert('Password reset request was sent. Support team will contact you shortly.');
-                        </script>";
+                            alert("Password reset request was sent. Support team will contact you shortly.");
+                            window.location.replace("login.php");
+                        </script>';
     
                         break;
                     }

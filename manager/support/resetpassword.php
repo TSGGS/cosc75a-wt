@@ -92,7 +92,7 @@
 
             echo '
                 <script>
-                    window.location.reload;
+                    window.location.replace("dashboard.php");
                 </script>
             ';
         }
