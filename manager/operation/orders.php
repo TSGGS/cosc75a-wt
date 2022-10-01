@@ -51,14 +51,9 @@
 </div>
 
 <div class="container mt-3">
-    <!-- <div id="orderSets">
-        <button class="btn btn-dark circular" onclick="getOrders('all');">All</button>
-        <button class="btn btn-dark circular">Type 1</button>
-        <button class="btn btn-dark circular">Type 2</button>
-    </div> -->
     <div class="mt-3" id="orderSet">
             <h2 class="col-title" id="orderSetTitle">Orders</h2>
-        <table class="table table-light table-hover" id="orderTable">
+        <table class="table table-light table-hover" id="orderTable" style="text-align: center;">
             <thead>
                 <th>Order ID</th>
                 <th>Customer Name</th>
@@ -70,18 +65,27 @@
             <?php
                 $sql = 'SELECT o.*, s.status_name, CONCAT(e.employee_firstname, " ", e.employee_lastname) AS employee_name FROM orders AS o LEFT JOIN status AS s ON s.status_id=o.order_status_id LEFT JOIN employees AS e ON e.employee_id=o.order_handler_employee_id ORDER BY o.order_timestamp DESC;';
                 $result = prepareSQL($conn, $sql);
-                while($row = mysqli_fetch_array($result)) {
+
+                if(mysqli_num_rows($result) == 0) {
                     echo '
-                    <tr>
-                        <td id="order_id">'.$row["order_id"].'</td>
-                        <td>'.$row["order_customer_name"].'</td>
-                        <td>'.$row["order_total_price"].'</td>
-                        <td>'.$row["order_delivery_date"].'</td>
-                        <td>
-                            <button type="button" class="btn btn-light" onclick="viewOrder(\''.$row["order_id"].'\', \''.$row["order_customer_name"].'\',\''.$row["order_mobile_number"].'\', \''.$row["order_address"].'\', \''.$row["order_total_price"].'\', \''.$row["order_status_id"].'\', \''.$row["order_delivery_date"].'\', \''.$row["status_name"].'\', \''.$row["employee_name"].'\');"><img  class= "btn-icon" src="..\..\images\resources\view.png"></button>
-                        </td>
-                    </tr>
-                    ';
+                            <tr>
+                                <td colspan=5>There is no orders</td>
+                            </tr>
+                        ';
+                } else {
+                    while($row = mysqli_fetch_array($result)) {
+                        echo '
+                            <tr>
+                                <td id="order_id">'.$row["order_id"].'</td>
+                                <td>'.$row["order_customer_name"].'</td>
+                                <td>'.$row["order_total_price"].'</td>
+                                <td>'.$row["order_delivery_date"].'</td>
+                                <td>
+                                    <button type="button" class="btn btn-light" onclick="viewOrder(\''.$row["order_id"].'\', \''.$row["order_customer_name"].'\',\''.$row["order_mobile_number"].'\', \''.$row["order_address"].'\', \''.$row["order_total_price"].'\', \''.$row["order_status_id"].'\', \''.$row["order_delivery_date"].'\', \''.$row["status_name"].'\', \''.$row["employee_name"].'\');"><img  class= "btn-icon" src="..\..\images\resources\view.png"></button>
+                                </td>
+                            </tr>
+                        ';
+                    }
                 }
             ?>
             </tbody>
