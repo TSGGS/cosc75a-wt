@@ -226,7 +226,7 @@
                 prepareSQL($conn, $sql, "isi", $orderCustID, $itemID,$_SESSION["cartInfo"][$item]["count"]);
             }
 
-            unset($_SESSION["cartList"], $_SESSION["cartCount"], $_SESSION["cartInfo"], $_SESSION["GRANDTOTAL"], $_SESSION["discountCode"]);
+            unset($_SESSION["cartList"], $_SESSION["itemCount"], $_SESSION["cartCount"], $_SESSION["cartInfo"], $_SESSION["GRANDTOTAL"], $_SESSION["discountCode"]);
             echo '
                 <script>
                     // let itemCount = document.getElementById("cart-count");

@@ -10,8 +10,11 @@
             addCart($prodInfo["product"]);
             break;
 
-        case "price":
-            getPrice($prodInfo["product"]);
+        case "silentUpdate":
+            silentUpdate($prodInfo["product"], $prodInfo["operation"]);
+
+        case "item":
+            getItem($prodInfo["product"]);
             break;
 
         case "delete":
@@ -45,11 +48,13 @@
     function addCart(string $prod) {
         if(!isset($_SESSION["cartList"])) {
             $_SESSION["cartList"] = array();
+            $_SESSION["itemCount"] = array();
         }
 
         if(!in_array($prod, $_SESSION["cartList"])) {
             array_push($_SESSION["cartList"], $prod);
             $_SESSION["cartCount"] = count($_SESSION["cartList"]);
+            $_SESSION["itemCount"][$prod] = 1;
         }
 
         $response = array(
@@ -60,7 +65,34 @@
         echo json_encode($response);
     }
 
-    function getPrice(string $prod) {
+    function silentUpdate($prod, $operation) {
+        switch($operation) {
+            case "add":
+                require ("db.php");
+
+                $sql = "SELECT i.inventory_product_count FROM products LEFT JOIN types AS t ON product_type=t.type_id LEFT JOIN prices AS p ON p.price_product_id=product_id INNER JOIN inventory AS i ON i.inventory_product_id=product_id WHERE p.price_end_timestamp IS NULL AND product_end_timestamp IS NULL AND i.inventory_product_count > 0 AND product_code=?;";
+                $result = prepareSQL($conn, $sql, "s", $prod);
+                $item = mysqli_fetch_array($result);
+                
+                if($_SESSION["itemCount"][$prod] <= $item["inventory_product_count"] ) {
+                    $_SESSION["itemCount"][$prod]++;
+                }
+
+                break;
+
+            case "subract":
+                if($_SESSION["itemCount"][$prod]-- == 0) {
+                    unset($_SESSION["itemCount"][$prod]);
+                    $_SESSION["itemCount"] = array_merge($_SESSION["itemCount"]);
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    function getItem(string $prod) {
         require ("db.php");
 
         $sql = "SELECT * FROM products LEFT JOIN types AS t ON product_type=t.type_id LEFT JOIN prices AS p ON p.price_product_id=product_id INNER JOIN inventory AS i ON i.inventory_product_id=product_id WHERE p.price_end_timestamp IS NULL AND product_end_timestamp IS NULL AND i.inventory_product_count > 0 AND product_code=?";
@@ -69,7 +101,8 @@
 
         $response = array(
             "product" => $prod,
-            "price" => $item["price_amount"]
+            "price" => $item["price_amount"],
+            "quantity" => $_SESSION["itemCount"][$prod]
         );
 
         header("Content-type: application/json");
@@ -84,8 +117,10 @@
                 $index = array_search($prod, $_SESSION["cartList"]);
                 unset($_SESSION["cartList"][$index]);
                 unset($_SESSION["cartInfo"][$prod]);
+                unset($_SESSION["itemCount"][$prod]);
                 $_SESSION["cartList"] = array_merge($_SESSION["cartList"]);
                 $_SESSION["cartCount"] = count($_SESSION["cartList"]);
+                $_SESSION["itemCount"] = array_merge($_SESSION["itemCount"]);
             }
         }
 

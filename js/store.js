@@ -7,33 +7,40 @@ function destroyPromotion() {
     document.body.style.overflowY = "scroll";
 }
 
-function addtoCart(prod) {
-    let counter = document.getElementById("cart-count");
-    let product = {
-        "type": "cart",
-        "product": prod
-    };
-
-    let xhr = new XMLHttpRequest();
-    let jsonString = JSON.stringify(product);
-    let url = "includes/receive.php";
-
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-
-    xhr.responseType = "json";
-    xhr.onload = function (){
-        let response = xhr.response;
-        counter.innerHTML = response["count"];
-        
-    };
-
-    xhr.send(jsonString);
-}
-
 let list = {};
 let GrandTotal = 0;
 let discount = 0;
+
+function addtoCart(prod) {
+    if(list.hasOwnProperty(prod)) {
+        silentUpdateQty(prod, "add");
+    } else {
+        let counter = document.getElementById("cart-count");
+        let product = {
+            "type": "cart",
+            "product": prod
+        };
+
+        let xhr = new XMLHttpRequest();
+        let jsonString = JSON.stringify(product);
+        let url = "includes/receive.php";
+
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.responseType = "json";
+        xhr.onload = function (){
+            let response = xhr.response;
+            counter.innerHTML = response["count"];
+        };
+
+        xhr.send(jsonString);
+
+        list[prod] = {};
+        list[prod]["count"] = 1;
+        }
+}
+
 function updateQty(code, price, max) {
     let qty = document.getElementById(code+"-qty");
     let display = document.getElementById(code+"-total");
@@ -42,8 +49,17 @@ function updateQty(code, price, max) {
         qty.innerText = 1;
         qty.value = 1;
     } else if(qty.value > max) {
-        qty.innerText = 1;
-        qty.value = 1;
+        qty.innerText = max;
+        qty.value = max;
+    }
+     else if(qty.value == "0") {
+        deleteItem(code);
+    }
+
+    if(list[code]["count"] < qty.value) {
+        silentUpdateQty(code, "add");
+    } else if (list[code]["count"] > qty.value) {
+        silentUpdateQty(code, "subtract");
     }
 
     list[code]["count"] = qty.value;
@@ -54,9 +70,26 @@ function updateQty(code, price, max) {
     updateTotal();
 }
 
+function silentUpdateQty(prod, operation) {
+    let product = {
+        "type": "silentUpdate",
+        "product": prod,
+        "operation": operation
+    };
+
+    let xhr = new XMLHttpRequest();
+    let jsonString = JSON.stringify(product);
+    let url = "includes/receive.php";
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.send(jsonString);
+}
+
 function initTotal(cartList) {
     cartList.forEach(item => {
-        callPrice(item);
+        callItem(item);
         list[item] = {
             "price": 0,
             "count": 1
@@ -64,9 +97,9 @@ function initTotal(cartList) {
     });
 }
 
-function callPrice(item) {
+function callItem(item) {
     let product = {
-        "type": "price",
+        "type": "item",
         "product": item
     };
 
@@ -83,6 +116,7 @@ function callPrice(item) {
         for (i in list) {
             if(i == response["product"]) {
                 list[i]["price"] = response["price"];
+                list[i]["count"] = response["quantity"];
             }
         }
         updateTotal();

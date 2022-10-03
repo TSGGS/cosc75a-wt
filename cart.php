@@ -50,13 +50,13 @@
                                 <span class="cart-name">'.$item["product_name"].'</span>
                             </div>
                             <div class="col-1">
-                                <input type="number" class="form-control" id="'.$item["product_code"].'-qty" name="" onclick="updateQty(\''.$item["product_code"].'\','.$item["price_amount"].')" onblur="updateQty(\''.$item["product_code"].'\','.$item["price_amount"].','.$item["inventory_product_count"].')" min="1" max="'.$item["inventory_product_count"].'" value="1">
+                                <input type="number" class="form-control" id="'.$item["product_code"].'-qty" name="" onclick="updateQty(\''.$item["product_code"].'\','.$item["price_amount"].')" onblur="updateQty(\''.$item["product_code"].'\','.$item["price_amount"].','.$item["inventory_product_count"].')" min="1" max="'.$item["inventory_product_count"].'" value="'.$_SESSION["itemCount"][$item["product_code"]].'">
                             </div>
                             <div class="col-1 text-center">
                                 <span class="cart-name">₱ '.$item["price_amount"].'
                             </div>
                             <div class="col-1 text-center">
-                                <span class="cart-name" id="'.$item["product_code"].'-total">₱ '.$item["price_amount"].'</span>
+                                <span class="cart-name" id="'.$item["product_code"].'-total">₱ '.$item["price_amount"] * $_SESSION["itemCount"][$item["product_code"]].'</span>
                             </div>
                             <div class="col-1 text-center">
                                 <button type="button" class="btn btn-light" onclick="deleteItem(\''.$item["product_code"].'\')"><img  class= "trash-can" src=".\images\resources\trash.png"></button>
