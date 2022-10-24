@@ -114,6 +114,7 @@
         $cpno = $_POST["customer-number"];
         $date = $_POST["customer-date"];
         $otime = $_POST["customer-time"];
+        $checkbox = isset($_POST["customer-time-asap"]);
 
         if(!validateName($name)){
             echo '
@@ -208,41 +209,65 @@
         }
 
         if(!$error1 && !$error2 && !$error3 && !$error4 && !$error5) {
-            $sql = "INSERT INTO orders VALUES (NULL, ?, ?, ?, ?, ?, NULL, 1, NULL)";
-            prepareSQL($conn, $sql, "sisss", $name, $_SESSION["GRANDTOTAL"], $cpno, $addr, $custDateTime);
+            try {
+                $sql = "INSERT INTO orders VALUES (NULL, ?, ?, ?, ?, ?, NULL, 2, NULL)";
+                prepareSQL($conn, $sql, "sisss", $name, $_SESSION["cartInfo"]["grandTotal"], $cpno, $addr, $custDateTime);
 
-            $sql = "SELECT LAST_INSERT_ID() AS orderCustID";
-            $result = prepareSQL($conn,$sql);
-            $orderCustID = mysqli_fetch_array($result);
-            $orderCustID = $orderCustID["orderCustID"];
+                $sql = "SELECT LAST_INSERT_ID() AS orderCustID";
+                $result = prepareSQL($conn,$sql);
+                $orderCustID = mysqli_fetch_array($result);
+                $orderCustID = $orderCustID["orderCustID"];
 
-            foreach($_SESSION["cartList"] as $item) {
-                $sql = "SELECT product_id FROM products WHERE product_code = ?";
-                $result = prepareSQL($conn, $sql, "s", $item);
-                $itemID = mysqli_fetch_array($result);
-                $itemID = $itemID["product_id"];
+                foreach($_SESSION["cartList"] as $item => $itemValue) {
+                    $sql = "SELECT product_id FROM products WHERE product_code = ?";
+                    $result = prepareSQL($conn, $sql, "s", $item);
+                    $itemID = mysqli_fetch_array($result);
+                    $itemID = $itemID["product_id"];
 
-                $sql = "INSERT INTO order_items VALUES (NULL, ?, ?, ?)";
-                prepareSQL($conn, $sql, "isi", $orderCustID, $itemID,$_SESSION["cartInfo"][$item]["count"]);
+                    $sql = "INSERT INTO order_items VALUES (NULL, ?, ?, ?)";
+                    prepareSQL($conn, $sql, "isi", $orderCustID, $itemID, $itemValue["count"]);
+
+                    $sql = "SELECT inventory_product_count FROM inventory WHERE inventory_product_id=?";
+                    $result = prepareSQL($conn, $sql, "i", $itemID);
+                    $inventoryItemCount = mysqli_fetch_array($result);
+                    $inventoryItemCount = $inventoryItemCount["inventory_product_count"];
+
+                    $sql = "UPDATE inventory SET inventory_product_count=? WHERE inventory_product_id=?";
+                    prepareSQL($conn, $sql, "ii", $inventoryItemCount - $itemValue["count"], $itemID);
+                }
+
+                unset($_SESSION["cartList"], $_SESSION["cartInfo"]);
+                echo '
+                    <script>
+                        window.location.href = "thank-you.php";
+                    </script>
+                ';
+            } catch(Exception $e) {
+                echo "error";
             }
-
-            unset($_SESSION["cartList"], $_SESSION["itemCount"], $_SESSION["cartCount"], $_SESSION["cartInfo"], $_SESSION["GRANDTOTAL"], $_SESSION["discountCode"]);
-            echo '
-                <script>
-                    // let itemCount = document.getElementById("cart-count");
-                    // itemCount.value = 0;
-                    window.location.href = "thank-you.php";
-                </script>
-            ';
         } else {
-            echo '
-                <script>
-                    document.getElementById("customer-name").value = '.json_encode($name).';
-                    document.getElementById("customer-address").value = '.json_encode($addr).';
-                    document.getElementById("customer-number").value = '.json_encode($cpno).';
-                    document.getElementById("customer-date").value = '.json_encode($date).';
-                    document.getElementById("customer-time").value = '.json_encode($otime).';
-                </script>
-            ';
+            if($checkbox) {
+                echo '
+                    <script>
+                        document.getElementById("customer-name").value = '.json_encode($name).';
+                        document.getElementById("customer-address").value = '.json_encode($addr).';
+                        document.getElementById("customer-number").value = '.json_encode($cpno).';
+                        document.getElementById("customer-date").value = '.json_encode($date).';
+                        document.getElementById("customer-time-asap").checked = true;
+                        document.getElementById("customer-time").value = '.json_encode($otime).';
+                        checkedCheckbox();
+                    </script>
+                ';
+            } else {
+                echo '
+                    <script>
+                        document.getElementById("customer-name").value = '.json_encode($name).';
+                        document.getElementById("customer-address").value = '.json_encode($addr).';
+                        document.getElementById("customer-number").value = '.json_encode($cpno).';
+                        document.getElementById("customer-date").value = '.json_encode($date).';
+                        document.getElementById("customer-time").value = '.json_encode($otime).';
+                    </script>
+                ';
+            }
         }
     }

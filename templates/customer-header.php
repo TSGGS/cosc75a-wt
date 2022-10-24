@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <?php
     session_start();
-    if(!isset($_SESSION["cartCount"])) {
+    if(!isset($_SESSION["cartList"])) {
         $count = 0;
-    } else {
-        $count = $_SESSION["cartCount"];
-    }
+        $_SESSION["cartList"] = array();
+        $_SESSION["cartInfo"] = array();
+        $_SESSION["cartInfo"]["dCode"] = null;
+        $_SESSION["cartInfo"]["dAmount"] = 0;
 
-    if(!isset($_SESSION["itemCount"])) {
-        $_SESSION["itemCount"] = array();
+    } else {
+        $count = count($_SESSION["cartList"]);
     }
 ?>
 <html>
