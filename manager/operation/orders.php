@@ -35,18 +35,6 @@
             <div class="col"><h4 id="orderList">
             </h4></div>
         </div>
-        <div class="row d-none" id="handler">
-            <div class="col-3"><h4>Status</h4></div>
-            <div class="col"><h4 id="orderStatus"></h4></div>
-        </div>
-        <div class="row d-none" id="handler1">
-            <div class="col-3"><h4>Employee</h4></div>
-            <div class="col"><h4 id="orderEmployee"></h4></div>
-        </div>
-        <div class="row mt-3 mb-3 d-none" id="noHandler">
-            <div class="col inline-right"><button class="btn btn-dark" id="btn-accept">Accept</button></div>
-            <div class="col"><button class="btn btn-danger" id="btn-decline">Decline</button></div>
-        </div>
     </div>
 </div>
 

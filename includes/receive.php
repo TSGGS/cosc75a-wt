@@ -29,6 +29,10 @@
             removeDiscount();
             break;
 
+        case "orderList":
+            getOrders($data["id"]);
+            break;
+
         default:
             break;
     }
@@ -146,4 +150,20 @@
     function removeDiscount() {
         $_SESSION["cartInfo"]["dAmount"] = 0;
         $_SESSION["cartInfo"]["dCode"] = null;
+    }
+
+    function getOrders($oid) {
+        require ("db.php");
+        $sql = "SELECT o.order_product_quantity, p.product_name FROM order_items AS o LEFT JOIN products AS p ON o.order_product_id=p.product_id WHERE order_id=?";
+        $result = prepareSQL($conn, $sql, "i", $oid);
+        $list = "";
+        while($row = mysqli_fetch_array($result)) {
+            $listItem = $row["order_product_quantity"]." x ".$row["product_name"]."<br>";
+            $list = $list . $listItem;
+        }
+        $response = array(
+            "orders" => $list
+        );
+        header("Content-type: application/json");
+        echo json_encode($response);
     }

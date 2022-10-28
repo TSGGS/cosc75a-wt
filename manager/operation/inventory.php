@@ -21,6 +21,9 @@
                             <div class="col">
                                 <input type="number" class="form-control" name="'.$row["product_code"].'" value="'.$row["inventory_product_count"].'" min="0" required>
                                 <input type="hidden" name="hidden-'.$row["product_code"].'" value="'.$row["inventory_id"].'">
+                                <div class="mb-2 d-none error" id="'.$row["product_code"].'-error">
+                                    Invalid Quantity
+                                </div>
                             </div>
                         </div>
                     ';
@@ -36,17 +39,35 @@
 </div>
 <?php
     if(isset($_POST["update-inventory"])) {
+        $error = false;
         foreach($products as $product) {
             $p = $_POST[$product];
             $id = $_POST["hidden-".$product];
 
-            $sql = "UPDATE inventory SET inventory_product_count=?, inventory_timestamp=? WHERE inventory_id=?";
-            prepareSQL($conn, $sql, "isi", $p, date('Y-m-d H:i:s', time()), $id);
+            if($p < 1) {
+                echo ' 
+                    <script>
+                        toggleError("'.$product.'-error", "show");
+                    </script>
+                ';
+                $error = true;
+            } else {
+                echo '
+                    <script>
+                        toggleError("'.$product.'-error", "hide");
+                    </script>
+                ';
+
+                $sql = "UPDATE inventory SET inventory_product_count=?, inventory_timestamp=? WHERE inventory_id=?";
+                        prepareSQL($conn, $sql, "isi", $p, date('Y-m-d H:i:s', time()), $id);
+            }
         }
 
-        echo '
+        if(!$error) {
+            echo '
                 <script>
                     window.location.replace("dashboard.php");
                 </script>
             ';
+        }
     }

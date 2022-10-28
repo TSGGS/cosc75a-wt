@@ -96,25 +96,6 @@ function viewOrder(id, name, mobile, address, price, status, datetime, statusNam
         orderContact.innerText = mobile;
         orderPrice.innerText = "₱ "+price;
         orderDelivery.innerText = datetime;
-        orderStatus.innerText = statusName;
-
-        if(status != 1) {
-            orderEmployee.innerText = empName;
-
-            handler.classList.remove("d-none");
-            handler1.classList.remove("d-none");
-            noHandler.classList.add("d-none");
-        } else {
-            handler.classList.add("d-none");
-            noHandler.classList.remove("d-none");
-        }
-
-        btn_accept.onclick = function() {
-            confirmStatus('accept', id)
-        };
-        btn_decline.onclick = function() {
-            confirmStatus('decline', id)
-        };
 
         modal.classList.remove("d-none");
         orderFull.classList.remove("d-none");
