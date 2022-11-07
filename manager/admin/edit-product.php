@@ -31,7 +31,7 @@
                 <span>Product Not Found</span>
             </div>
         </form>
-        <form class="mt-4" action="./edit-product.php" method="post" enctype="multipart/form-data" autocomplete="off">
+        <form class="mt-4" action="./edit-product.php" id="update-product-form" method="post" enctype="multipart/form-data" autocomplete="off">
         <div class="row">
                 <div class="col-2">
                     <label class="col-form-label" for="update-product-code"><h4>Product Code</h4></label>
@@ -144,7 +144,7 @@
             </div>
             <div class="row my-3">
                 <div class="col gx-0 inline-right">
-                    <button type="submit" class="btn btn-light" name="update-product"><strong>Update Product</strong></button>
+                    <button type="submit" class="btn btn-light" name="update-product" onclick="verifyUpdateProduct(event)"><strong>Update Product</strong></button>
                 </div>
             </div>
         </form>
@@ -203,7 +203,7 @@
 
     }
 
-    if(isset($_POST["update-product"])) {
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
         $pStatus = $_POST["update-product-status"];
         $pCode = strtoupper($_POST["update-product-code"]);
         $pName = $_POST["update-product-name"];
@@ -217,8 +217,8 @@
         $emptyPrice = isEmpty($pPrice, "update-product-price");
         $emptyDesc = isEmpty($pDesc, "update-product-desc");
 
-        $emptyImage = (isset($_FILES["update-product-image"]["size"])) && ($_FILES["update-product-image"]["size"] > 0);
-        if($emptyImage) {
+        $emptyImage = $_FILES["update-product-image"]["size"] <= 0;
+        if(!$emptyImage) {
             $img = $_FILES["update-product-image"]["name"];
             $imgTmp = $_FILES["update-product-image"]["tmp_name"];
             $imgExt = pathinfo($img, PATHINFO_EXTENSION);
@@ -247,7 +247,7 @@
                 prepareSQL($conn, $sql, "ss", date('Y-m-d H:i:s'), $pCode);
     
             } else {
-                if($pPrice >= 0) {
+                if($pPrice >= 1) {
                     echo '
                         <script>
                             toggleError("update-product-price-error", "hide");

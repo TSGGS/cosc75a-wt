@@ -4,10 +4,11 @@
 
     changeTitle("../templates/header.php", "New Product - Administrator");
     validateUserPage($_SESSION["tid"], $_SERVER["REQUEST_URI"]);
+
 ?>
     <div class="container mt-3">
         <h1>Add New Product</h1>
-        <form class="mt-4" action="./new-product.php" method="POST" enctype="multipart/form-data" autocomplete="off">
+        <form class="mt-4" id="new-product-form" action="./new-product.php" method="POST" enctype="multipart/form-data" autocomplete="off">
             <div class="row">
                 <div class="col-2">
                     <label class="col-form-label" for="new-product-code"><h4>Product Code</h4></label>
@@ -90,14 +91,14 @@
                     <div class="row">
                         <textarea class="form-control" name="new-product-desc" id="new-product-desc"></textarea>
                     </div>
-                </div>
-                <div class="row mb-2 d-none error" id="new-product-desc-error">
-                        <span>Description Requied</span>
+                    <div class="row mb-2 d-none error" id="new-product-desc-error">
+                            <span>Description Required</span>
+                    </div>
                 </div>
             </div>
             <div class="row mt-5">
                 <div class="col inline-right">
-                    <button type="submit" class="btn btn-light" name="new-product"><strong>Add New Product</strong></button>
+                    <button type="submit" class="btn btn-light" name="new-product" onclick="verifyNewProduct(event)" ><strong>Add New Product</strong></button>
                 </div>
             </div>
         </form>
@@ -105,7 +106,7 @@
 <?php
     require("../templates/footer.php");
 
-    if(isset($_POST["new-product"])) {
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
         $pCode = strtoupper($_POST["new-product-code"]);
         $pName = $_POST["new-product-name"];
         $pType = $_POST["new-product-type"] ?? "0";
@@ -146,25 +147,25 @@
             $error1 = false;
         }
 
-        if(!isImage($imgExt)) {
-            echo '
-                <script>
-                    toggleError("new-product-image-error", "show");
-                </script>
-            ';
+    if(!isImage($imgExt)) {
+        echo '
+            <script>
+                toggleError("new-product-image-error", "show");
+            </script>
+        ';
 
-            $error2 = true;
-        } else {
-            echo '
-                <script>
-                    toggleError("new-product-image-error", "hide");
-                </script>
-            ';
+        $error2 = true;
+    } else {
+        echo '
+            <script>
+                toggleError("new-product-image-error", "hide");
+            </script>
+        ';
 
-            $error2 = false;
-        }
+        $error2 = false;
+    }
 
-        if($pPrice >= 0) {
+        if($pPrice >= 1) {
             echo '
                 <script>
                     toggleError("new-product-price-error", "hide");

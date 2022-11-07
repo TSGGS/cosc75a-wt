@@ -6,6 +6,7 @@
     $data = json_decode($json_data, true);
 
     switch($data["type"]) {
+        // CUSTOMER SIDE
         case "cartAdd":
             addCart($data["product"]);
             break;
@@ -32,6 +33,13 @@
         case "orderList":
             getOrders($data["id"]);
             break;
+
+        // MANAGER SIDE
+        case "verifyProductCode":
+            verifyProductCode($data["pcode"]);
+
+        case "verifyProductCodeUpdate":
+            verifyProductCodeUpdate($data["pcode"]);
 
         default:
             break;
@@ -164,6 +172,43 @@
         $response = array(
             "orders" => $list
         );
+        header("Content-type: application/json");
+        echo json_encode($response);
+    }
+
+    // MANAGER SIDE
+    function verifyProductCode($pCode) {
+        require ("db.php");
+        $sql = "SELECT product_id, product_code FROM products WHERE product_code=?";
+        $result = prepareSQL($conn, $sql, "s", $pCode);
+        if(mysqli_num_rows($result) != 0) {
+            $response = array(
+                "status" => "INVALID"
+            );
+        } else {
+            $response = array(
+                "status" => "VALID"
+            );
+        }
+
+        header("Content-type: application/json");
+        echo json_encode($response);
+    }
+
+    function verifyProductCodeUpdate($pCode) {
+        require ("db.php");
+        $sql = "SELECT product_id, product_code FROM products WHERE product_code=?";
+        $result = prepareSQL($conn, $sql, "s", $pCode);
+        if(mysqli_num_rows($result) == 0) {
+            $response = array(
+                "status" => "INVALID"
+            );
+        } else {
+            $response = array(
+                "status" => "VALID"
+            );
+        }
+
         header("Content-type: application/json");
         echo json_encode($response);
     }

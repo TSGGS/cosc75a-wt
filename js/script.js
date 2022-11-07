@@ -133,3 +133,183 @@ function confirmStatus(choice, id) {
 
     xhr.send(jsonString);
 }
+
+//#region OPS NEW/UPDATE PRODUCT VALIDATION
+async function verifyProductCode(pCode) {
+    if(pCode.match(/[A-Z0-9]{3,}/) === null) {
+        document.getElementById("new-product-code-error").classList.remove("d-none");
+        return false;
+    } else {
+        let data = {
+            "type": "verifyProductCode",
+            "pcode": pCode
+        };
+
+        const endpoint = new URL("http://localhost:5000/wt_shop/includes/receive.php");
+        const response = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(data)
+        }).catch(() => {
+            alert("There was a communication problem in the server. Please try again.")
+        });
+
+        const status = await response.json();
+
+        if(status.status !== "VALID") {
+            document.getElementById("new-product-code-error").classList.remove("d-none");
+            return false;
+        } else {
+            document.getElementById("new-product-code-error").classList.add("d-none");
+            return true;
+        }
+    }
+}
+
+async function verifyProductCodeUpdate(pCode) {
+    if(pCode.match(/[A-Z0-9]{3,}/) === null) {
+        document.getElementById("update-product-code-error").classList.remove("d-none");
+        return false;
+    } else {
+        let data = {
+            "type": "verifyProductCodeUpdate",
+            "pcode": pCode
+        };
+
+        const endpoint = new URL("http://localhost:5000/wt_shop/includes/receive.php");
+        const response = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(data)
+        }).catch(() => {
+            alert("There was a communication problem in the server. Please try again.")
+        });
+
+        const status = await response.json();
+
+        if(status.status !== "VALID") {
+            document.getElementById("update-product-code-error").classList.remove("d-none");
+            return false;
+        } else {
+            document.getElementById("update-product-code-error").classList.add("d-none");
+            return true;
+        }
+    }
+}
+
+function verifyProductName(pName, id) {
+    let regex = pName.match(/^[^-\s][a-zA-Z0-9 '-]+$/gm);
+
+    if(regex === null) {
+        document.getElementById(id).classList.remove("d-none");
+        return false;
+    } else {
+        document.getElementById(id).classList.add("d-none");
+        return true;
+    }
+}
+
+function verifyProductType(pType, id) {
+    let value = pType.options[pType.selectedIndex].value
+    
+    if(value === "--SELECT PRODUCT TYPE--") {
+        document.getElementById(id).classList.remove("d-none");
+        return false;
+    } else {
+        document.getElementById(id).classList.add("d-none");
+        return true;
+    }
+}
+
+function verifyProductImge(pImge, id) {
+    if(pImge === undefined) {
+        document.getElementById(id).classList.remove("d-none");
+        return false;
+    } else {
+        if(!pImge.type.match("image.*")) {
+            document.getElementById(id).classList.remove("d-none");
+            return false;
+        } else {
+            document.getElementById(id).classList.add("d-none");
+            return true;
+        }
+    }
+}
+
+function verifyProductPrce(pPrce, id) {
+    if(pPrce < 1) {
+        document.getElementById(id).classList.remove("d-none");
+        return false;
+    } else {
+        document.getElementById(id).classList.add("d-none");
+        return true;
+    }
+}
+
+function verifyProductDesc(pDesc, id) {
+    if(pDesc.match(/^[^-\s][a-zA-Z0-9 "'-_]+$/gm) === null) {
+        document.getElementById(id).classList.remove("d-none");
+        return false;
+    } else {
+        document.getElementById(id).classList.add("d-none");
+        return true;
+    }
+}
+
+async function verifyNewProduct(e) {
+    e.preventDefault();
+
+    let pCode = document.getElementById("new-product-code").value;
+    let pName = document.getElementById("new-product-name").value;
+    let pType = document.getElementById("new-product-type");
+    let pImge = document.getElementById("new-product-image").files[0];
+    let pPrce = document.getElementById("new-product-price").value;
+    let pDesc = document.getElementById("new-product-desc").value;
+
+    verifyProductCode(pCode).then((status) => {
+        let isPCodeValid = status;
+        let isPNameValid = verifyProductName(pName, "new-product-name-error");
+        let isPTypeValid = verifyProductType(pType, "new-product-type-error");
+        let isPImgeValid = verifyProductImge(pImge, "new-product-image-error");
+        let isPPrceValid = verifyProductPrce(pPrce, "new-product-price-error");
+        let isPDescValid = verifyProductDesc(pDesc, "new-product-desc-error");
+    
+        if(isPCodeValid && isPNameValid && isPTypeValid && isPImgeValid && isPPrceValid && isPDescValid) {
+            document.getElementById("new-product-form").submit();
+        }
+    });
+}
+
+async function verifyUpdateProduct(e) {
+    e.preventDefault();
+
+    let pCode = document.getElementById("update-product-code").value;
+    let pName = document.getElementById("update-product-name").value;
+    let pType = document.getElementById("update-product-type");
+    let pImge = document.getElementById("update-product-image").files[0];
+    let pPrce = document.getElementById("update-product-price").value;
+    let pDesc = document.getElementById("update-product-desc").value;
+
+    verifyProductCodeUpdate(pCode).then((status) => {
+        let isPCodeValid = status;
+        let isPNameValid = verifyProductName(pName, "update-product-name-error");
+        let isPTypeValid = verifyProductType(pType, "update-product-type-error");
+        let isPImgeValid = true;
+        let isPPrceValid = verifyProductPrce(pPrce, "update-product-price-error");
+        let isPDescValid = verifyProductDesc(pDesc, "update-product-desc-error");
+
+        if(pImge !== undefined) {
+            isPImgeValid = verifyProductImge(pImge, "update-product-image-error");
+        }
+    
+        if(isPCodeValid && isPNameValid && isPTypeValid && isPImgeValid && isPPrceValid && isPDescValid) {
+            document.getElementById("update-product-form").submit();
+        }
+    });
+}
+//#endregion
+

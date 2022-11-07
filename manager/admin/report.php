@@ -27,7 +27,17 @@
         <h1>Week Report</h1>
         <div class="row mt-4">
             <div class="col-3 border-hidden"><h3 class="align-bottom">Total Sales</h3></div>
-            <div class="col border"><h3><?= "Php ".$result["SUM"] ?></h3></div>
+            <?php
+                if($result["SUM"] == NULL) {
+            ?>
+                    <div class="col border"><h3><?= "Php 0" ?></h3></div>
+            <?php
+                } else {
+            ?>
+                    <div class="col border"><h3><?= "Php ".$result["SUM"] ?></h3></div>
+            <?php
+                }
+            ?>
         </div>
         <div class="row mt-4">
             <div class="col-3 border-hidden"><h3 class="align-bottom">Hero Product</h3></div>
@@ -53,13 +63,21 @@
             </thead>
             <tbody>
                 <?php
-                    while($result = mysqli_fetch_array($mysql_result3)) {
+                    if(mysqli_num_rows($mysql_result3) == 0) {
                         echo '
                             <tr>
-                                <td><h5>'.$result["Name"].'</h5></td>
-                                <td><h5>'.$result["SUM"].'</h5></td>
+                                <td colspan=2><h5>No products ordered</h5></td>
                             </tr>
                         ';
+                    } else {
+                        while($result = mysqli_fetch_array($mysql_result3)) {
+                            echo '
+                                <tr>
+                                    <td><h5>'.$result["Name"].'</h5></td>
+                                    <td><h5>'.$result["SUM"].'</h5></td>
+                                </tr>
+                            ';
+                        }
                     }
                 ?>
             </tbody>
