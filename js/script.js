@@ -201,7 +201,7 @@ async function verifyProductCodeUpdate(pCode) {
     }
 }
 
-function verifyProductName(pName, id) {
+function verifyName(pName, id) {
     let regex = pName.match(/^[^-\s][a-zA-Z0-9 '-]+$/gm);
 
     if(regex === null) {
@@ -213,7 +213,7 @@ function verifyProductName(pName, id) {
     }
 }
 
-function verifyProductType(pType, id) {
+function verifyType(pType, id) {
     let value = pType.options[pType.selectedIndex].value
     
     if(value === "--SELECT PRODUCT TYPE--") {
@@ -225,7 +225,7 @@ function verifyProductType(pType, id) {
     }
 }
 
-function verifyProductImge(pImge, id) {
+function verifyImge(pImge, id) {
     if(pImge === undefined) {
         document.getElementById(id).classList.remove("d-none");
         return false;
@@ -240,7 +240,7 @@ function verifyProductImge(pImge, id) {
     }
 }
 
-function verifyProductPrce(pPrce, id) {
+function verifyPrce(pPrce, id) {
     if(pPrce < 1) {
         document.getElementById(id).classList.remove("d-none");
         return false;
@@ -250,12 +250,107 @@ function verifyProductPrce(pPrce, id) {
     }
 }
 
-function verifyProductDesc(pDesc, id) {
+function verifyDesc(pDesc, id) {
     if(pDesc.match(/^[^-\s][a-zA-Z0-9 "'-_]+$/gm) === null) {
         document.getElementById(id).classList.remove("d-none");
         return false;
     } else {
         document.getElementById(id).classList.add("d-none");
+        return true;
+    }
+}
+
+async function verifyPromotionCode(pCode) {
+    if(pCode.match(/[A-Z0-9]{3,}/) === null) {
+        document.getElementById("new-promotion-code-error").classList.remove("d-none");
+        return false;
+    } else {
+        let data = {
+            "type": "verifyPromotionCode",
+            "pcode": pCode
+        };
+
+        const endpoint = new URL("http://localhost:5000/wt_shop/includes/receive.php");
+        const response = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(data)
+        }).catch(() => {
+            alert("There was a communication problem in the server. Please try again.")
+        });
+
+        const status = await response.json();
+
+        if(status.status !== "VALID") {
+            document.getElementById("new-promotion-code-error").classList.remove("d-none");
+            return false;
+        } else {
+            document.getElementById("new-promotion-code-error").classList.add("d-none");
+            return true;
+        }
+    }
+}
+
+async function verifyPromotionCodeUpdate(pCode) {
+    if(pCode.match(/[A-Z0-9]{3,}/) === null) {
+        document.getElementById("update-promotion-code-error").classList.remove("d-none");
+        return false;
+    } else {
+        let data = {
+            "type": "verifyPromotionCodeUpdate",
+            "pcode": pCode
+        };
+
+        const endpoint = new URL("http://localhost:5000/wt_shop/includes/receive.php");
+        const response = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(data)
+        }).catch(() => {
+            alert("There was a communication problem in the server. Please try again.")
+        });
+
+        const status = await response.json();
+
+        if(status.status !== "VALID") {
+            document.getElementById("update-promotion-code-error").classList.remove("d-none");
+            return false;
+        } else {
+            document.getElementById("update-promotion-code-error").classList.add("d-none");
+            return true;
+        }
+    }
+}
+
+function verifyDateRange(pStrt, pEndg, idS, idE) {
+    let now = new Date().getTime();
+    let start = new Date(pStrt).getTime();
+    let end = new Date(pEndg).getTime();
+
+    console.log(`${start}: ${typeof(start)}, ${end}: ${typeof(end)}`);
+
+    if(now > start || now > end || start > end || isNaN(start) || isNaN(end)) {
+        if(now > start || start > end || isNaN(start)) {
+            document.getElementById(idS).classList.remove("d-none");
+        } else {
+            document.getElementById(idS).classList.add("d-none");
+        }
+
+        if(now > end || isNaN(end)) {
+            document.getElementById(idE).classList.remove("d-none");
+        } else {
+            document.getElementById(idE).classList.add("d-none");
+        }
+
+        return false;
+    } else {
+        document.getElementById(idS).classList.add("d-none");
+        document.getElementById(idE).classList.add("d-none");
+
         return true;
     }
 }
@@ -272,11 +367,11 @@ async function verifyNewProduct(e) {
 
     verifyProductCode(pCode).then((status) => {
         let isPCodeValid = status;
-        let isPNameValid = verifyProductName(pName, "new-product-name-error");
-        let isPTypeValid = verifyProductType(pType, "new-product-type-error");
-        let isPImgeValid = verifyProductImge(pImge, "new-product-image-error");
-        let isPPrceValid = verifyProductPrce(pPrce, "new-product-price-error");
-        let isPDescValid = verifyProductDesc(pDesc, "new-product-desc-error");
+        let isPNameValid = verifyName(pName, "new-product-name-error");
+        let isPTypeValid = verifyType(pType, "new-product-type-error");
+        let isPImgeValid = verifyImge(pImge, "new-product-image-error");
+        let isPPrceValid = verifyPrce(pPrce, "new-product-price-error");
+        let isPDescValid = verifyDesc(pDesc, "new-product-desc-error");
     
         if(isPCodeValid && isPNameValid && isPTypeValid && isPImgeValid && isPPrceValid && isPDescValid) {
             document.getElementById("new-product-form").submit();
@@ -296,14 +391,14 @@ async function verifyUpdateProduct(e) {
 
     verifyProductCodeUpdate(pCode).then((status) => {
         let isPCodeValid = status;
-        let isPNameValid = verifyProductName(pName, "update-product-name-error");
-        let isPTypeValid = verifyProductType(pType, "update-product-type-error");
+        let isPNameValid = verifyName(pName, "update-product-name-error");
+        let isPTypeValid = verifyType(pType, "update-product-type-error");
         let isPImgeValid = true;
-        let isPPrceValid = verifyProductPrce(pPrce, "update-product-price-error");
-        let isPDescValid = verifyProductDesc(pDesc, "update-product-desc-error");
+        let isPPrceValid = verifyPrce(pPrce, "update-product-price-error");
+        let isPDescValid = verifyDesc(pDesc, "update-product-desc-error");
 
         if(pImge !== undefined) {
-            isPImgeValid = verifyProductImge(pImge, "update-product-image-error");
+            isPImgeValid = verifyImge(pImge, "update-product-image-error");
         }
     
         if(isPCodeValid && isPNameValid && isPTypeValid && isPImgeValid && isPPrceValid && isPDescValid) {
@@ -313,3 +408,44 @@ async function verifyUpdateProduct(e) {
 }
 //#endregion
 
+async function verifyNewPromotion(e) {
+    e.preventDefault();
+
+    let pCode = document.getElementById("new-promotion-code").value;
+    let pImge = document.getElementById("new-promotion-image").files[0];
+    let pStrt = document.getElementById("new-promotion-start").value;
+    let pEndg = document.getElementById("new-promotion-end").value;
+
+    verifyPromotionCode(pCode).then((status) => {
+        let isPCodeValid = status;
+        let isPImgeValid = verifyImge(pImge, "new-promotion-image-error");
+        let isPDteRValid = verifyDateRange(pStrt, pEndg, "new-promotion-start-error", "new-promotion-end-error");
+
+        if(isPCodeValid && isPImgeValid && isPDteRValid) {
+            document.getElementById("new-promotion-form").submit();
+        }
+    });
+}
+
+async function verifyUpdatePromotion(e) {
+    e.preventDefault();
+
+    let pCode = document.getElementById("update-promotion-code").value;
+    let pImge = document.getElementById("update-promotion-image").files[0];
+    let pStrt = document.getElementById("update-promotion-start").value;
+    let pEndg = document.getElementById("update-promotion-end").value;
+
+    verifyPromotionCodeUpdate(pCode).then((status) => {
+        let isPCodeValid = status;
+        let isPImgeValid = true;
+        let isPDteRValid = verifyDateRange(pStrt, pEndg, "update-promotion-start-error", "update-promotion-end-error");
+
+        if(pImge !== undefined){
+            isPImgeValid = verifyImge(pImge, "update-promotion-image-error");
+        }
+
+        if(isPCodeValid && isPImgeValid && isPDteRValid) {
+            document.getElementById("update-promotion-form").submit();
+        }
+    });
+}

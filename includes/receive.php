@@ -37,9 +37,19 @@
         // MANAGER SIDE
         case "verifyProductCode":
             verifyProductCode($data["pcode"]);
+            break;
 
         case "verifyProductCodeUpdate":
             verifyProductCodeUpdate($data["pcode"]);
+            break;
+
+        case "verifyPromotionCode":
+            verifyPromotionCode($data["pcode"]);
+            break;
+
+        case "verifyPromotionCodeUpdate":
+            verifyPromotionCodeUpdate($data["pcode"]);
+            break;
 
         default:
             break;
@@ -198,6 +208,42 @@
     function verifyProductCodeUpdate($pCode) {
         require ("db.php");
         $sql = "SELECT product_id, product_code FROM products WHERE product_code=?";
+        $result = prepareSQL($conn, $sql, "s", $pCode);
+        if(mysqli_num_rows($result) == 0) {
+            $response = array(
+                "status" => "INVALID"
+            );
+        } else {
+            $response = array(
+                "status" => "VALID"
+            );
+        }
+
+        header("Content-type: application/json");
+        echo json_encode($response);
+    }
+
+    function verifyPromotionCode($pCode) {
+        require("db.php");
+        $sql = "SELECT promotion_id FROM promotions WHERE promotion_code=?";
+        $result = prepareSQL($conn, $sql, "s", $pCode);
+        if(mysqli_num_rows($result) != 0) {
+            $response = array(
+                "status" => "INVALID"
+            );
+        } else {
+            $response = array(
+                "status" => "VALID"
+            );
+        }
+
+        header("Content-type: application/json");
+        echo json_encode($response);
+    }
+
+    function verifyPromotionCodeUpdate($pCode) {
+        require("db.php");
+        $sql = "SELECT promotion_id FROM promotions WHERE promotion_code=?";
         $result = prepareSQL($conn, $sql, "s", $pCode);
         if(mysqli_num_rows($result) == 0) {
             $response = array(

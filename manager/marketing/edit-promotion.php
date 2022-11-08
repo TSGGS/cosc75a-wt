@@ -31,7 +31,7 @@
                 <span>Promotion Not Found</span>
             </div>
         </form>
-        <form class="mt-4" action="./edit-promotion.php" method="POST" enctype="multipart/form-data" autocomplete="off">
+        <form class="mt-4" id="update-promotion-form" action="./edit-promotion.php" method="POST" enctype="multipart/form-data" autocomplete="off">
             <div class="row my-2">
                 <div class="col-3 col-title">
                     <label class="col-form-label" for="update-promotion-code"><h4>Promotion Code</h4></label>
@@ -91,7 +91,7 @@
             </div>
             <div class="row my-3">
                 <div class="col pe-0 inline-right">
-                    <button type="submit" class="btn btn-light" name="update-promotion"><strong>Update Promotion</strong></button>
+                    <button type="submit" class="btn btn-light" name="update-promotion" onclick="verifyUpdatePromotion(event)"><strong>Update Promotion</strong></button>
                 </div>
             </div>
         </form>
@@ -139,7 +139,7 @@
         }
     }
     
-    if(isset($_POST["update-promotion"])){
+    if($_SERVER["REQUEST_METHOD"] == "POST"){
         $prCode = strtoupper($_POST["update-promotion-code"]);
         $prStart = strtotime($_POST["update-promotion-start"]);
         $prEnd = strtotime($_POST["update-promotion-end"]);

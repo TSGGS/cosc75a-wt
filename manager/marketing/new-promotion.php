@@ -7,7 +7,7 @@
 ?>
     <div class="container mt-3">
         <h1>New Promotion</h1>
-        <form class="mt-4" action="./new-promotion.php" method="POST" enctype="multipart/form-data" autocomplete="off">
+        <form class="mt-4" id="new-promotion-form" action="./new-promotion.php" method="POST" enctype="multipart/form-data" autocomplete="off">
             <div class="row my-2">
                 <div class="col-3 col-title">
                     <label class="col-form-label" for="new-promotion-code"><h4>Promotion Code</h4></label>
@@ -62,7 +62,7 @@
             </div>
             <div class="row mt-5">
                 <div class="col pe-0 inline-right">
-                    <button type="submit" class="btn btn-light" name="new-promotion"><strong>Create Promotion</strong></button>
+                    <button type="submit" class="btn btn-light" name="new-promotion" onclick="verifyNewPromotion(event)"><strong>Create Promotion</strong></button>
                 </div>
             </div>
         </form>
@@ -70,7 +70,7 @@
 <?php
     require("../templates/footer.php");
 
-    if(isset($_POST["new-promotion"])) {
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
         $prCode = strtoupper($_POST["new-promotion-code"]);
         $prStart = strtotime($_POST["new-promotion-start"]);
         $prEnd = strtotime($_POST["new-promotion-end"]);
