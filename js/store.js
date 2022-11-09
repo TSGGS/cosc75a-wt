@@ -33,16 +33,24 @@ function addtoCart(prod) {
 function updateQty(code, price, max) {
     let qty = document.getElementById(code+"-qty");
     let display = document.getElementById(code+"-total");
+    let submit = document.getElementById("place-order");
 
     if(qty.value === "" || qty.value < 0) {
+        qty.style.borderColor = "red";
         qty.innerText = 1;
         qty.value = 1;
+        submit.disabled = true;
     } else if(qty.value > max) {
+        qty.style.borderColor = "red";
         qty.innerText = max;
         qty.value = max;
+        submit.disabled = true;
     }
      else if(qty.value == "0") {
         deleteItem(code);
+    } else {
+        qty.style.borderColor = "#ced4da";
+        submit.disabled = false;
     }
 
     let data = {
