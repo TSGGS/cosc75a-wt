@@ -7,6 +7,7 @@
 		    <script src="js/store.js"></script>
     ';
 ?>
+
     <div class="content mt-2">
         <h1 class="mt-3 page-title">Products</h1>
         <?php

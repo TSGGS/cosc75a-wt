@@ -25,6 +25,24 @@ function addtoCart(prod) {
     xhr.onload = function (){
         let response = xhr.response;
         counter.innerHTML = response["count"];
+
+        let prod_notif = document.createElement("div");
+        let img = document.createElement("img");
+        let span = document.createElement("span");
+
+        span.innerText = "Product added to cart";
+        img.src = "./images/resources/checked.png";
+        img.alt = "check"
+
+        prod_notif.classList.add("product-notification");
+        prod_notif.append(img, span);
+
+        document.body.appendChild(prod_notif);
+
+        setTimeout(() => {
+            let notif = document.querySelector(".product-notification");
+            notif.remove()
+        }, 2500)
     };
 
     xhr.send(jsonString);
@@ -221,7 +239,7 @@ function checkedCheckbox() {
     if(checkBox.checked == true) {
         let cur = new Date();
 
-        date.value = cur.toISOString().split("T")[0]
+        date.value = `${cur.getFullYear()}-${cur.getMonth()+1}-${cur.getDate()}`
         time.value = "";
         date.readOnly = true;
         time.readOnly = true;

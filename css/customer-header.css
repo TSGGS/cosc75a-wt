@@ -4,6 +4,7 @@
     padding: 0;
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
+    user-select: none;
 }
 
 body {
@@ -155,7 +156,6 @@ body {
 }
 
 /* Product Page */
-
 .content {
     width: 95vw;
     top: 12vh;
@@ -227,6 +227,32 @@ body {
     display: block;
     margin-top: 10px;
     font-weight: 400;
+}
+
+.product-notification {
+    height: 6vh;
+    width: 20vw;
+    background-color: #FAF9F6;
+    outline: 1px solid black;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+}
+
+.product-notification img {
+    height: 4vh;
+    width: 4vh;
+    padding-right: 5px;
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease 2s;
 }
 
 /* CART PAGE */

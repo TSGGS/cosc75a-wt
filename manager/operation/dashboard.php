@@ -28,20 +28,20 @@
             <div class="col-3 border-hidden"><h3 class="align-bottom">Total Orders</h3></div>
             <div class="col border"><h3><?= $result4["count"] ?></h3></div>
         </div>
-		<div class="row mt-4">
+		<!-- <div class="row mt-4">
             <div class="col-3 border-hidden"><h3 class="align-bottom">Accepted Orders</h3></div>
             <div class="col border"><h3><?= $result5["count"] ?></h3></div>
-        </div>
+        </div> -->
 
         <h2>Weekly</h2>
          <div class="row mt-4">
             <div class="col-3 border-hidden"><h3 class="align-bottom">Total Orders</h3></div>
             <div class="col border"><h3><?= $result1["count"] ?></h3></div>
         </div>
-		<div class="row mt-4">
+		<!-- <div class="row mt-4">
             <div class="col-3 border-hidden"><h3 class="align-bottom">Accepted Orders</h3></div>
             <div class="col border"><h3><?= $result2["count"] ?></h3></div>
-        </div>
+        </div> -->
     </div>
 <?php
     require("../templates/footer.php");
